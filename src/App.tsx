@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import HelloWorld from './components/HelloWorld';
 import TodoList from './components/TodoList';
+import Counter from './components/Counter';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <HelloWorld />
+        <Counter />
         <TodoList title="my first todolist"/>
       </header>
     </div>
