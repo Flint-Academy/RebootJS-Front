@@ -4,6 +4,7 @@ import './App.css';
 import HelloWorld from './components/HelloWorld';
 import TodoList from './components/TodoList';
 import Counter from './components/Counter';
+import ContactList from './users/components/MyContacts';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <HelloWorld />
         <Counter />
+        <ContactList />
         <TodoList title="my first todolist"/>
       </header>
     </div>
