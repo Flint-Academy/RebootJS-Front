@@ -1,22 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import HelloWorld from './components/HelloWorld';
-import TodoList from './components/TodoList';
-import Counter from './components/Counter';
-import ContactList from './users/components/MyContacts';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { blue, blueGrey, red } from '@material-ui/core/colors';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Box from '@material-ui/core/Box';
+import AppLayout from './AppLayout';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+    secondary: blueGrey,
+    error: red,
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <HelloWorld />
-        <Counter />
-        <ContactList />
-        <TodoList title="my first todolist"/>
-      </header>
-    </div>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Box>
+            <AppLayout/>
+          </Box>
+        </ThemeProvider>
   );
 }
 
