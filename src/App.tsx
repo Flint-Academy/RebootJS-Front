@@ -5,6 +5,8 @@ import { blue, blueGrey, red } from '@material-ui/core/colors';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import AppLayout from './AppLayout';
+import { Router } from 'react-router-dom';
+import history from '../src/history';
 
 const theme = createMuiTheme({
   palette: {
@@ -16,12 +18,14 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Box>
-            <AppLayout/>
-          </Box>
-        </ThemeProvider>
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box>
+          <AppLayout/>
+        </Box>
+      </ThemeProvider>
+    </Router>
   );
 }
 

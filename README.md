@@ -1,3 +1,5 @@
+Don't forget that you must export the env. var. `REACT_APP_BACKEND`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
