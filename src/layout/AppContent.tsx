@@ -1,8 +1,8 @@
 import Box from '@material-ui/core/Box';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import LoginScreen from './login/LoginScreen';
-import ContactList from './users/components/MyContacts';
+import LoginScreen from '../login/components/LoginScreen';
+import ContactList from '../users/components/MyContacts';
 
 export function AppContent() {
   return (
