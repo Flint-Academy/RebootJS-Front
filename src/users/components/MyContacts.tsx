@@ -1,6 +1,8 @@
 import React from 'react';
 import { IUserInfo } from '../types';
 import { getUsers } from '../../api/methods';
+import { List, ListItem, ListItemText } from '@material-ui/core';
+import { ContactListItem } from './ContactListItem';
 
 export interface IContactListState {
   list: IUserInfo[];
@@ -14,16 +16,16 @@ class ContactList extends React.Component<{}, IContactListState> {
 
   render() {
     return (
-        <ul>
+        <List>
           { this.state.list.length ? null : (
-            <li> No contact </li>
+            <ListItem>
+              <ListItemText primary="No contact"/>
+            </ListItem>
           )}
           {this.state.list.map((user) => (
-            <li>
-              Contact {user.firstname} {user.lastname}
-            </li>
+            <ContactListItem info={user}/>
           ))}
-        </ul>
+        </List>
     );
   }
 
