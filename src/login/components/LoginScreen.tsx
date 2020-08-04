@@ -3,6 +3,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
 import LoginTabPanel from './LoginTabPanel';
+import LoginForm from './LoginForm';
 
 type ILoginScreenState = {
   tab: number;
@@ -28,7 +29,7 @@ class LoginScreen extends React.Component<{}, ILoginScreenState> {
           <Tab label="Register" />
         </Tabs>
         <LoginTabPanel value={this.state.tab} index={0}>
-          <h1>This will be the login part</h1>
+          <LoginForm />
         </LoginTabPanel>
         <LoginTabPanel value={this.state.tab} index={1}>
           <h1>This will be the registration part</h1>
