@@ -4,6 +4,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { IFormField, IPasswordField, IProfileFormFields } from '../types';
+import { PasswordRequirements } from './PasswordRequirements';
 
 export interface ICredentialsSectionProps {
   password: IPasswordField;
@@ -37,6 +38,7 @@ export function CredentialsSection({ password, confirmation, update }: ICredenti
           onChange={(event) => update('confirmation', event.target.value)}
           {...(!confirmation.isValid ? { error: true, helperText: confirmation.error } : {})}
         />
+        <PasswordRequirements password={password} />
       </FormGroup>
     </FormControl>
   );
