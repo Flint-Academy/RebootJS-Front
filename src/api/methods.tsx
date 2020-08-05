@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IUserInfo } from '../users/types';
+import { IProfile } from '../identity/types';
 
 export function getUsers() : Promise<IUserInfo[]>{
   return axios.get(`${process.env.REACT_APP_BACKEND}/users`, { withCredentials: true })
@@ -17,6 +18,25 @@ export function login(email: string, password: string) : Promise<string>{
     },
     { withCredentials: true }
   ).then(
-    (res) => res.data
+    res => res.data
+  )
+}
+
+export function createProfile(
+  email: string,
+  password: string,
+  firstname: string,
+  lastname: string
+) : Promise<IProfile> {
+  return axios.post(
+    `${process.env.REACT_APP_BACKEND}/register`,
+    {
+      email: email,
+      password: password,
+      firstname: firstname,
+      lastname: lastname
+    }
+  ).then(
+    res => res.data
   )
 }

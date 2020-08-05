@@ -20,8 +20,8 @@ export type IProfileFormStatus = 'unavailable' | 'ready' | 'success' | 'error';
 
 export interface IProfileFormFields {
   email: IFormField<string>;
-  firstName: IFormField<string>;
-  lastName: IFormField<string>;
+  firstname: IFormField<string>;
+  lastname: IFormField<string>;
   password: IPasswordField;
   confirmation: IFormField<string>;
 }
