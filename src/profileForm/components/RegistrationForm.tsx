@@ -7,12 +7,8 @@ import { IProfileFormFields, IProfileFormStatus } from '../types';
 import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { Alert } from '../../layout/Alert';
-import { createProfile } from '../../api/methods';
 import { history } from '../../history';
-import { validateEmailField } from '../utils/validateEmailField';
-import { validateNameField } from '../utils/validateNameField';
-import { validatePasswordField } from '../utils/validatePasswordField';
-import { validateConfirmationField } from '../utils/validateConfirmationField';
+import { updateProfileForm, createNewProfile } from '../utils/profileActions';
 
 export interface IRegistrationDisplayFormState {
   status: IProfileFormStatus;
@@ -43,46 +39,12 @@ class RegistrationForm extends React.Component<{}, IRegistrationDisplayFormState
   };
 
   update = <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void => {
-    const newState = {
-      ...this.state,
-      fields: {
-        ...this.state.fields,
-        [field]: {
-          ...this.state.fields[field],
-          value: value
-        }
-      }
-    }
-    if (field === 'email') {
-      const { email } = newState.fields;
-      validateEmailField(email);
-    } else if (['firstName', 'lastName'].includes(field)) {
-      const formField = newState.fields[field];
-      validateNameField(formField);
-    } else if (field === 'password') {
-      const { password } = newState.fields;
-      validatePasswordField(password);
-    }
-    if (['password', 'confirmation'].includes(field)) {
-      const { password, confirmation } = newState.fields;
-      validateConfirmationField(confirmation, password);
-    }
-
-    this.setState(newState);
+    this.setState(updateProfileForm(this.state, field, value));
   }
 
   saveProfile = (): void => {
-    const { email, firstname, lastname, password, confirmation } = this.state.fields;
-    if(
-      email.isValid &&
-      firstname.isValid &&
-      lastname.isValid &&
-      password.isValid &&
-      confirmation.isValid
-    ) {
-      createProfile(email.value, password.value, firstname.value,lastname.value)
-        .then(profile => history.push(`profile/${profile._id}`))
-    }
+    createNewProfile(this.state.fields)
+      .then(profile => history.push(`profile/${profile._id}`));
   }
 
   render() {
