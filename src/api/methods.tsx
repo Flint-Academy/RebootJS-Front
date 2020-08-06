@@ -40,3 +40,25 @@ export function createProfile(
     res => res.data
   )
 }
+
+export function deleteConnectedProfile(){
+  return axios.delete(
+    `${process.env.REACT_APP_BACKEND}/users`,
+    { withCredentials: true }
+  ).then(
+    res => res.data
+  )
+}
+
+export function getConnectedProfile(){
+  return axios.get(
+    `${process.env.REACT_APP_BACKEND}/users/me`,
+    { withCredentials: true }
+  ).then(
+    res => res.data
+  )
+}
+
+export function patchProfile(data: {firstname: string, lastname: string, password?: string}): Promise<IProfile> {
+  return axios.patch(`${process.env.REACT_APP_BACKEND}/users`, data, { withCredentials: true }).then(res => res.data);
+}

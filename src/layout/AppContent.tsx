@@ -3,6 +3,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LoginScreen from '../login/components/LoginScreen';
 import ContactList from '../users/components/MyContacts';
+import MyProfile from '../profileForm/components/MyProfile';
 
 export function AppContent() {
   return (
@@ -10,6 +11,7 @@ export function AppContent() {
       <Switch>
         <Route path="/login" component={LoginScreen}/>
         <Route path="/contacts" component={ContactList} />
+        <Route path="/profile" component={MyProfile} />
         <Route path="/" component={LoginScreen} />
       </Switch>
     </Box>

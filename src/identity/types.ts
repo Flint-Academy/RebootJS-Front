@@ -1,5 +1,7 @@
 export type IUserStatus = 'available' | 'incall' | 'offline';
 
+export type IIdentityStatus = 'unavailable' | 'ready';
+
 export interface IProfile {
   _id: string;
   email: string;

@@ -38,7 +38,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState>{
 
   submit = (): void => {
     login(this.state.email.value, this.state.password.value)
-      .then((id) => history.push(`/profile/${id}`))
+      .then((_id) => history.push(`/profile`))
   }
 
   render(){
