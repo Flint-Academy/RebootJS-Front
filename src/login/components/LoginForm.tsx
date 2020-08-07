@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { ILoginForm, ILoginStatus } from '../types';
-import { Alert } from '../../layout/Alert';
+import { Alert } from '../../layout/components/Alert';
 import { IFormField } from '../../profileForm/types';
 import { login } from '../../api/methods';
 import { history } from '../../history';

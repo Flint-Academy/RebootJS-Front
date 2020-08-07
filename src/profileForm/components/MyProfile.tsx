@@ -7,7 +7,7 @@ import { IProfileFormFields, IProfileFormStatus } from '../types';
 import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { IIdentityStatus, IProfile } from '../../identity/types';
-import { Alert } from '../../layout/Alert';
+import { Alert } from '../../layout/components/Alert';
 import { updateProfileForm, deleteProfile, saveUpdatedProfile } from '../utils/profileActions';
 import { history } from '../../history';
 import { getConnectedProfile } from '../../api/methods';
