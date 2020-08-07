@@ -4,8 +4,14 @@ import Forum from '@material-ui/icons/Forum';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import React, { Fragment } from 'react';
+import { IDrawerContent } from '../types';
+import ContactListButton from './ContactListButton';
 
-export function AppMenu() {
+interface IAppMenuProps {
+  changeDrawerContent: (content: IDrawerContent) => void;
+}
+
+export function AppMenu({ changeDrawerContent } : IAppMenuProps){
   return (
     <Fragment>
       <AppBar position="static" style={{ height: '10vh' }}>
@@ -18,7 +24,7 @@ export function AppMenu() {
           </Grid>
           <Grid item>
             <Toolbar>
-              This will be the navigation part
+              <ContactListButton showContactList={() => changeDrawerContent('contacts')}/>
             </Toolbar>
           </Grid>
         </Grid>

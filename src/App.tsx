@@ -4,7 +4,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { blue, blueGrey, red } from '@material-ui/core/colors';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
-import AppLayout from './layout/AppLayout';
+import AppLayout from './layout/components/AppLayout';
 import { Router } from 'react-router-dom';
 import history from '../src/history';
 
