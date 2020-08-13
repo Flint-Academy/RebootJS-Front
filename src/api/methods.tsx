@@ -22,6 +22,16 @@ export function login(email: string, password: string) : Promise<string>{
   )
 }
 
+export function logout() : Promise<string>{
+  return axios.post(
+    `${process.env.REACT_APP_BACKEND}/logout`,
+    {},
+    { withCredentials: true }
+  ).then(
+    res => res.data
+  )
+}
+
 export function createProfile(
   email: string,
   password: string,

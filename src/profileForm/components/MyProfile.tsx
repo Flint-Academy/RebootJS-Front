@@ -10,7 +10,7 @@ import { IIdentityStatus, IProfile } from '../../identity/types';
 import { Alert } from '../../layout/components/Alert';
 import { updateProfileForm, deleteProfile, saveUpdatedProfile } from '../utils/profileActions';
 import { history } from '../../history';
-import { getConnectedProfile } from '../../api/methods';
+import { getConnectedProfile, logout } from '../../api/methods';
 
 export interface IProfileFormState {
   identityStatus: IIdentityStatus;
@@ -82,6 +82,10 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
     deleteProfile().then(() => history.push('/'));
   };
 
+  logout = (): void => {
+    logout().then(() => history.push('/'));
+  }
+
   render() {
     const { identityStatus, formStatus, fields } = this.state
     const { email, firstname, lastname, password, confirmation } = fields;
@@ -93,6 +97,11 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
         </Box>
         <Box style={{ margin: '2rem 0' }}>
           <Grid container justify="flex-end">
+            <Grid item xs={2}>
+              <Button variant="contained" color="secondary" fullWidth={true} onClick={this.logout}>
+                Logout
+              </Button>
+            </Grid>
             <Grid item xs={2}>
               <Button variant="contained" color="secondary" fullWidth={true} onClick={this.deleteProfile}>
                 Delete account
