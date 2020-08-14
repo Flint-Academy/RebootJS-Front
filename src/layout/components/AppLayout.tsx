@@ -4,6 +4,8 @@ import { AppMenu } from './AppMenu';
 import { AppContent } from './AppContent';
 import { AppDrawer, drawerWidth } from './AppDrawer';
 import { IDrawerContent } from '../types';
+import { getUsers } from '../../api/methods';
+import { IUserInfo } from '../../users/types';
 
 const styles = (theme: Theme) =>
 createStyles({
@@ -34,6 +36,7 @@ interface AppLayoutProps {
 interface AppLayoutState {
   showDrawer: boolean;
   drawerContent?: IDrawerContent;
+  users: IUserInfo[];
 }
 
 class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
@@ -41,7 +44,14 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
     super(props);
     this.state = {
       showDrawer: false,
+      users: []
     }
+  }
+
+
+  componentDidMount(){
+    getUsers()
+      .then(users => { this.setState({ ...this.state, users: users }) });
   }
 
   changeDrawerContent = (newContent: IDrawerContent) => {
@@ -58,9 +68,9 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
       <div>
         <div className={contentClasses}>
           <AppMenu changeDrawerContent={this.changeDrawerContent} />
-          <AppContent />
+          <AppContent users={this.state.users} />
         </div>
-        <AppDrawer show={this.state.showDrawer} hideDrawer={this.hideDrawer} content={this.state.drawerContent}/>
+        <AppDrawer users={this.state.users} show={this.state.showDrawer} hideDrawer={this.hideDrawer} content={this.state.drawerContent}/>
       </div>
     );
   }

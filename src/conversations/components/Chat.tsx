@@ -6,51 +6,55 @@ import ChatInput from './ChatInput';
 import { IConversation, IConversationsStatus } from '../types';
 import { Alert } from '../../layout/components/Alert';
 import { AttendeeList } from './AttendeeList';
-import { getUsers, getConversation } from '../../api/methods';
+import { getConversation } from '../../api/methods';
 import { IUserInfo } from '../../users/types';
 import { Loading } from '../../layout/utils/Loading';
 
 export interface IChatProps {
   status: IConversationsStatus;
   match: Match<{ conversationId: string }>;
+  users: IUserInfo[];
 }
 
 export interface IChatState {
-  users: IUserInfo[];
   conversation?: IConversation;
 }
 
 class Chat extends React.Component<IChatProps, IChatState>{
   _isMounted: boolean = false;
 
-  constructor(props : IChatProps){
+  constructor(props: IChatProps) {
     super(props);
-    console.log(`Displayed conv #${props.match.params.conversationId}`)
-    this.state = {
-      users: [],
+    this.state = {};
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+
+    if (this.props.match?.params.conversationId) {
+      getConversation(this.props.match?.params.conversationId)
+        .then(conversation => { if (this._isMounted) this.setState({ ...this.state, conversation: conversation }) })
     }
   }
 
-  componentDidMount(){
-    this._isMounted = true;
-
-    getUsers()
-      .then(users => { if(this._isMounted) this.setState({ ...this.state, users: users }) });
-    getConversation(this.props.match.params.conversationId)
-      .then(conversation => { console.log(this._isMounted); if(this._isMounted) this.setState({ ...this.state, conversation: conversation })})
+  componentWillReceiveProps(){
+    if (this.props.match?.params.conversationId) {
+      getConversation(this.props.match?.params.conversationId)
+        .then(conversation => { if (this._isMounted) this.setState({ ...this.state, conversation: conversation }) })
+    }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this._isMounted = false;
   }
 
-  render(){
+  render() {
     const { conversation } = this.state
-    const conversationId = conversation ? conversation._id : this.props.match.params.conversationId;
+    const conversationId = conversation ? conversation._id : this.props.match?.params.conversationId;
     if (!conversation) return <Loading />
     if (!conversationId) return <Redirect to="/profile" />;
 
-    const { status } = this.props;
+    const { status, users } = this.props;
     const progress = status === 'sending' ? <LinearProgress /> : null;
     return (
       <div
@@ -81,16 +85,16 @@ class Chat extends React.Component<IChatProps, IChatState>{
             <ChatMessages
               conversationId={conversationId}
               messages={conversation.messages}
-              users={this.state.users}
+              users={users}
             />
           </div>
           <div style={{ flexGrow: 0, height: '60px' }}>
-            <ChatInput conversationId={conversationId} targets={conversation.targets}/>
+            <ChatInput conversationId={conversationId} targets={conversation.targets} />
           </div>
         </div>
-          <div style={{ height: '100%', flexGrow: 0, width: '15%' }}>
-            <AttendeeList targets={conversation.targets} users={this.state.users} />
-          </div>
+        <div style={{ height: '100%', flexGrow: 0, width: '15%' }}>
+          <AttendeeList targets={conversation.targets} users={users} />
+        </div>
       </div>
     );
   }

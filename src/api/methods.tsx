@@ -3,14 +3,14 @@ import { IUserInfo } from '../users/types';
 import { IProfile } from '../identity/types';
 import { IConversation } from '../conversations/types';
 
-export function getUsers() : Promise<IUserInfo[]>{
+export function getUsers(): Promise<IUserInfo[]> {
   return axios.get(`${process.env.REACT_APP_BACKEND}/users`, { withCredentials: true })
-       .then((res) => {
-         return res.data.users as IUserInfo[];
-       })
+    .then((res) => {
+      return res.data.users as IUserInfo[];
+    })
 }
 
-export function login(email: string, password: string) : Promise<string>{
+export function login(email: string, password: string): Promise<string> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND}/login`,
     {
@@ -23,7 +23,7 @@ export function login(email: string, password: string) : Promise<string>{
   )
 }
 
-export function logout() : Promise<string>{
+export function logout(): Promise<string> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND}/logout`,
     {},
@@ -38,7 +38,7 @@ export function createProfile(
   password: string,
   firstname: string,
   lastname: string
-) : Promise<IProfile> {
+): Promise<IProfile> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND}/register`,
     {
@@ -52,7 +52,7 @@ export function createProfile(
   )
 }
 
-export function deleteConnectedProfile(){
+export function deleteConnectedProfile() {
   return axios.delete(
     `${process.env.REACT_APP_BACKEND}/users`,
     { withCredentials: true }
@@ -61,7 +61,7 @@ export function deleteConnectedProfile(){
   )
 }
 
-export function getConnectedProfile(){
+export function getConnectedProfile() {
   return axios.get(
     `${process.env.REACT_APP_BACKEND}/users/me`,
     { withCredentials: true }
@@ -70,7 +70,7 @@ export function getConnectedProfile(){
   )
 }
 
-export function patchProfile(data: {firstname: string, lastname: string, password?: string}): Promise<IProfile> {
+export function patchProfile(data: { firstname: string, lastname: string, password?: string }): Promise<IProfile> {
   return axios.patch(`${process.env.REACT_APP_BACKEND}/users`, data, { withCredentials: true }).then(res => res.data);
 }
 
@@ -81,13 +81,12 @@ export function sendMessage(conversionId: string, targets: string[], message: st
   });
 }
 
-export function getConversation(conversationId: string) : Promise<IConversation> {
-  return new Promise((res, rej) => res({
-    _id: '1234',
-    targets: ['5f340e6442cd8ac004bbb0e3', '5f2bf8663de3d95a4936ddc4'],
-    updatedAt: new Date().toString(),
-    unseenMessages: 3,
-    messages: [
+export const converstions : IConversation[] = [{
+  _id: '1234',
+  targets: ['5f340e6442cd8ac004bbb0e3', '5f2bf8663de3d95a4936ddc4'],
+  updatedAt: new Date().toString(),
+  unseenMessages: 0,
+  messages: [
     {
       _id: '123',
       conversationId: '1234',
@@ -104,5 +103,35 @@ export function getConversation(conversationId: string) : Promise<IConversation>
       targets: ['5f340e6442cd8ac004bbb0e3'],
       content: 'ça va ?',
     }]
-  }));
+},
+{
+  _id: '1235',
+  targets: ['5f340e6442cd8ac004bbb0e3', '5f2bf8663de3d95a4936ddc4'],
+  updatedAt: new Date().toString(),
+  unseenMessages: 1,
+  messages: [
+    {
+      _id: '123',
+      conversationId: '1234',
+      createdAt: new Date().toString(),
+      emitter: '5f340e6442cd8ac004bbb0e3',
+      targets: ['5f2bf8663de3d95a4936ddc4'],
+      content: 'Ceci est une autre conversation',
+    },
+    {
+      _id: '124',
+      conversationId: '1234',
+      createdAt: new Date().toString(),
+      emitter: '5f2bf8663de3d95a4936ddc4',
+      targets: ['5f340e6442cd8ac004bbb0e3'],
+      content: 'Ah bon ???',
+    }]
+}]
+
+export function getConversation(conversationId: string): Promise<IConversation> {
+  return new Promise((res, rej) => res(converstions.find(conv => conv._id === conversationId)));
+}
+
+export function getConversations(): Promise<IConversation[]> {
+  return new Promise((res, rej) => res(converstions))
 }

@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { Fragment } from 'react';
 import { IDrawerContent } from '../types';
 import ContactListButton from './ContactListButton';
+import MyConversationsButton from '../../conversations/components/MyConversationsButton';
 
 interface IAppMenuProps {
   changeDrawerContent: (content: IDrawerContent) => void;
@@ -24,6 +25,7 @@ export function AppMenu({ changeDrawerContent } : IAppMenuProps){
           </Grid>
           <Grid item>
             <Toolbar>
+              <MyConversationsButton showConversationList={() => changeDrawerContent('conversations')}/>
               <ContactListButton showContactList={() => changeDrawerContent('contacts')}/>
             </Toolbar>
           </Grid>

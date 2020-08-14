@@ -6,10 +6,13 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import React from 'react';
 import { IDrawerContent } from '../types';
 import ContactList from '../../users/components/MyContacts';
+import { IUserInfo } from '../../users/types';
+import ConversationList from '../../conversations/components/MyConversations';
 
 export interface IDrawerDisplayProps {
   show: boolean;
   content?: IDrawerContent;
+  users: IUserInfo[];
   hideDrawer: () => void;
 }
 
@@ -35,13 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export function AppDrawer({ show, content, hideDrawer }: IDrawerDisplayProps) {
+export function AppDrawer({ show, content, users, hideDrawer }: IDrawerDisplayProps) {
   const { drawerHeader, paper, drawerContent } = useStyles();
   const contentDisplay =
     content === 'contacts' ? (
       <ContactList />
     ) : content === 'conversations' ? (
-      <h1>Here will appear our conversations</h1>
+      <ConversationList status="ready" users={users}/>
     ) : content === 'call' ? (
       <h1>Here will appear our call in progress</h1>
     ) : null;
