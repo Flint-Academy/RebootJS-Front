@@ -44,25 +44,21 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
     }
   }
 
-  componentDidMount() {
-    getConnectedProfile()
-      .then((user: IProfile) => {
-        this.setState({ ...this.state, profile: user });
-        this.resetProfile();
-      });
+  async componentDidMount() {
+    const user = await getConnectedProfile()
+    this.setState({ ...this.state, profile: user });
+    this.resetProfile();
   }
 
   update = <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void => {
     this.setState(updateProfileForm(this.state, field, value));
   };
 
-  saveProfile = (): void => {
+  saveProfile = async (): Promise<void> => {
     if (this.state.profile) {
-      saveUpdatedProfile(this.state.fields, this.state.profile)
-        .then((user) => {
-          this.setState({ ...this.state, profile: user })
-          this.resetProfile();
-        })
+      const user = await saveUpdatedProfile(this.state.fields, this.state.profile)
+      this.setState({ ...this.state, profile: user })
+      this.resetProfile();
     }
   };
 
@@ -78,12 +74,14 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
     })
   };
 
-  deleteProfile = (): void => {
-    deleteProfile().then(() => history.push('/'));
+  deleteProfile = async (): Promise<void> => {
+    await deleteProfile();
+    history.push('/');
   };
 
-  logout = (): void => {
-    logout().then(() => history.push('/'));
+  logout = async (): Promise<void> => {
+    await logout()
+    history.push('/');
   }
 
   render() {

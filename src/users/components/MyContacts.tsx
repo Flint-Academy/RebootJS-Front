@@ -39,8 +39,9 @@ class ContactList extends React.Component<{}, IContactListState> {
     );
   }
 
-  componentDidMount(){
-    getUsers().then((users) => this.setState({list: users}))
+  async componentDidMount(){
+    const users = await getUsers();
+    this.setState({list: users});
   }
 }
 

@@ -42,9 +42,9 @@ class RegistrationForm extends React.Component<{}, IRegistrationDisplayFormState
     this.setState(updateProfileForm(this.state, field, value));
   }
 
-  saveProfile = (): void => {
-    createNewProfile(this.state.fields)
-      .then(profile => history.push(`profile/${profile._id}`));
+  saveProfile = async (): Promise<void> => {
+    const profile = await createNewProfile(this.state.fields);
+    history.push(`profile/${profile._id}`);
   }
 
   render() {

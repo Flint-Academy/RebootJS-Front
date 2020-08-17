@@ -49,9 +49,9 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
   }
 
 
-  componentDidMount(){
-    getUsers()
-      .then(users => { this.setState({ ...this.state, users: users }) });
+  async componentDidMount(){
+    const users = await getUsers()
+    this.setState({ ...this.state, users: users });
   }
 
   changeDrawerContent = (newContent: IDrawerContent) => {

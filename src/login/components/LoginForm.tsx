@@ -36,9 +36,9 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState>{
     this.setState({...this.state, [field]: { ...this.state[field], value: value }})
   }
 
-  submit = (): void => {
-    login(this.state.email.value, this.state.password.value)
-      .then((_id) => history.push(`/profile`))
+  submit = async (): Promise<void> => {
+    await login(this.state.email.value, this.state.password.value);
+    history.push(`/profile`);
   }
 
   render(){

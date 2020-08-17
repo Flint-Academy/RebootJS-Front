@@ -31,8 +31,8 @@ class Chat extends React.Component<IChatProps, IChatState>{
   async fetchConversation(){
     if (this.props.match?.params.conversationId) {
       const connectedUser = await getConnectedProfile();
-      getConversation(connectedUser, this.props.match?.params.conversationId)
-        .then(conversation => { if (this._isMounted) this.setState({ ...this.state, conversation: conversation }) })
+      const conversation = await getConversation(connectedUser, this.props.match?.params.conversationId)
+      if (this._isMounted) this.setState({ ...this.state, conversation: conversation })
     }
   }
 

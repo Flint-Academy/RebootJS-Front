@@ -3,43 +3,39 @@ import { IUserInfo } from '../users/types';
 import { IProfile } from '../identity/types';
 import { IConversation, IConversationMessage } from '../conversations/types';
 
-export function getUsers(): Promise<IUserInfo[]> {
-  return axios.get(`${process.env.REACT_APP_BACKEND}/users`, { withCredentials: true })
-    .then((res) => {
-      return res.data.users as IUserInfo[];
-    })
+export async function getUsers(): Promise<IUserInfo[]> {
+  const resp = await axios.get(`${process.env.REACT_APP_BACKEND}/users`, { withCredentials: true })
+  return resp.data.users;
 }
 
-export function login(email: string, password: string): Promise<string> {
-  return axios.post(
+export async function login(email: string, password: string): Promise<string> {
+  const resp = await axios.post(
     `${process.env.REACT_APP_BACKEND}/login`,
     {
       username: email,
       password: password
     },
     { withCredentials: true }
-  ).then(
-    res => res.data
-  )
+  );
+  return resp.data;
 }
 
-export function logout(): Promise<string> {
-  return axios.post(
+export async function logout(): Promise<string> {
+  const resp = await axios.post(
     `${process.env.REACT_APP_BACKEND}/logout`,
     {},
     { withCredentials: true }
-  ).then(
-    res => res.data
-  )
+  );
+  return resp.data;
 }
 
-export function createProfile(
+export async function createProfile(
   email: string,
   password: string,
   firstname: string,
   lastname: string
 ): Promise<IProfile> {
-  return axios.post(
+  const resp = await axios.post(
     `${process.env.REACT_APP_BACKEND}/register`,
     {
       email: email,
@@ -47,36 +43,34 @@ export function createProfile(
       firstname: firstname,
       lastname: lastname
     }
-  ).then(
-    res => res.data
   )
+  return resp.data;
 }
 
-export function deleteConnectedProfile() {
-  return axios.delete(
+export async function deleteConnectedProfile() {
+  const resp = await axios.delete(
     `${process.env.REACT_APP_BACKEND}/users`,
     { withCredentials: true }
-  ).then(
-    res => res.data
   )
+  return resp.data;
 }
 
-export function getConnectedProfile() {
-  return axios.get(
+export async function getConnectedProfile() {
+  const resp = await axios.get(
     `${process.env.REACT_APP_BACKEND}/users/me`,
     { withCredentials: true }
-  ).then(
-    res => res.data
-  )
+  );
+  return resp.data;
 }
 
-export function patchProfile(data: { firstname: string, lastname: string, password?: string }): Promise<IProfile> {
-  return axios.patch(`${process.env.REACT_APP_BACKEND}/users`, data, { withCredentials: true }).then(res => res.data);
+export async function patchProfile(data: { firstname: string, lastname: string, password?: string }): Promise<IProfile> {
+  const resp = await axios.patch(`${process.env.REACT_APP_BACKEND}/users`, data, { withCredentials: true })
+  return resp.data;
 }
 
 export async function sendMessage(conversationId: string, targets: string[], message: string): Promise<IConversationMessage> {
   console.log(`Message ${message} sent to ${targets.join(", ")}`);
-  return await axios.post(
+  const resp = await axios.post(
     `${process.env.REACT_APP_BACKEND}/messages`,
     {
       conversationId: conversationId,
@@ -84,7 +78,8 @@ export async function sendMessage(conversationId: string, targets: string[], mes
       content: message
     },
     { withCredentials: true }
-  ).then(res => res.data);
+  );
+  return resp.data;
 }
 
 export async function getConversation(connectedUser: IProfile, conversationId: string): Promise<IConversation> {
