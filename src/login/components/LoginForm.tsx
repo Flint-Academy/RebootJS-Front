@@ -8,7 +8,7 @@ import { ILoginForm, ILoginStatus } from '../types';
 import { Alert } from '../../layout/components/Alert';
 import { IFormField } from '../../profileForm/types';
 import { login } from '../../api/methods';
-import { history } from '../../history';
+import history from '../../history';
 
 interface ILoginFormProps {
   email?: IFormField<string>;

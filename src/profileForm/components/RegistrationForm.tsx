@@ -7,7 +7,7 @@ import { IProfileFormFields, IProfileFormStatus } from '../types';
 import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { Alert } from '../../layout/components/Alert';
-import { history } from '../../history';
+import history from '../../history';
 import { updateProfileForm, createNewProfile } from '../utils/profileActions';
 
 export interface IRegistrationDisplayFormState {
