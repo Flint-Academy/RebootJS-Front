@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IUserInfo } from '../users/types';
 import { IProfile } from '../identity/types';
-import { IConversation } from '../conversations/types';
+import { IConversation, IConversationMessage } from '../conversations/types';
 
 export function getUsers(): Promise<IUserInfo[]> {
   return axios.get(`${process.env.REACT_APP_BACKEND}/users`, { withCredentials: true })
@@ -74,64 +74,70 @@ export function patchProfile(data: { firstname: string, lastname: string, passwo
   return axios.patch(`${process.env.REACT_APP_BACKEND}/users`, data, { withCredentials: true }).then(res => res.data);
 }
 
-export function sendMessage(conversionId: string, targets: string[], message: string): Promise<string> {
-  return new Promise((res, rej) => {
-    console.log(`Message ${message} sent to ${targets.join(", ")}`);
-    res('OK');
-  });
+export async function sendMessage(conversationId: string, targets: string[], message: string): Promise<IConversationMessage> {
+  console.log(`Message ${message} sent to ${targets.join(", ")}`);
+  return await axios.post(
+    `${process.env.REACT_APP_BACKEND}/messages`,
+    {
+      conversationId: conversationId,
+      targets: targets,
+      content: message
+    },
+    { withCredentials: true }
+  ).then(res => res.data);
 }
 
-export const converstions : IConversation[] = [{
-  _id: '1234',
-  targets: ['5f340e6442cd8ac004bbb0e3', '5f2bf8663de3d95a4936ddc4'],
-  updatedAt: new Date().toString(),
-  unseenMessages: 0,
-  messages: [
-    {
-      _id: '123',
-      conversationId: '1234',
-      createdAt: new Date().toString(),
-      emitter: '5f340e6442cd8ac004bbb0e3',
-      targets: ['5f2bf8663de3d95a4936ddc4'],
-      content: 'Salut',
-    },
-    {
-      _id: '124',
-      conversationId: '1234',
-      createdAt: new Date().toString(),
-      emitter: '5f2bf8663de3d95a4936ddc4',
-      targets: ['5f340e6442cd8ac004bbb0e3'],
-      content: 'ça va ?',
-    }]
-},
-{
-  _id: '1235',
-  targets: ['5f340e6442cd8ac004bbb0e3', '5f2bf8663de3d95a4936ddc4'],
-  updatedAt: new Date().toString(),
-  unseenMessages: 1,
-  messages: [
-    {
-      _id: '123',
-      conversationId: '1234',
-      createdAt: new Date().toString(),
-      emitter: '5f340e6442cd8ac004bbb0e3',
-      targets: ['5f2bf8663de3d95a4936ddc4'],
-      content: 'Ceci est une autre conversation',
-    },
-    {
-      _id: '124',
-      conversationId: '1234',
-      createdAt: new Date().toString(),
-      emitter: '5f2bf8663de3d95a4936ddc4',
-      targets: ['5f340e6442cd8ac004bbb0e3'],
-      content: 'Ah bon ???',
-    }]
-}]
+export async function getConversation(connectedUser: IProfile, conversationId: string): Promise<IConversation> {
+  const messages: IConversationMessage[] = await axios.get(
+    `${process.env.REACT_APP_BACKEND}/messages/${conversationId}`,
+    { withCredentials: true }
+  ).then(res => res.data);
+  if (messages.length > 0) {
+    const attendees = [...new Set(messages.flatMap(({ emitter, targets }) => [emitter, ...targets]))];
+    const targets = attendees.filter((id) => id !== connectedUser._id);
+    return {
+      _id: conversationId,
+      targets: targets,
+      messages: messages,
+      updatedAt: getLastMessageDate(messages),
+      unseenMessages: 0
+    }
+  }
 
-export function getConversation(conversationId: string): Promise<IConversation> {
-  return new Promise((res, rej) => res(converstions.find(conv => conv._id === conversationId)));
+  return { _id: conversationId, targets: [], messages: [], updatedAt: new Date().toString(), unseenMessages: 0 }
 }
 
-export function getConversations(): Promise<IConversation[]> {
-  return new Promise((res, rej) => res(converstions))
+export async function getConversations(connectedUser: IProfile): Promise<IConversation[]> {
+ const messages: IConversationMessage[] = await axios.get(
+    `${process.env.REACT_APP_BACKEND}/messages`,
+    { withCredentials: true }
+  ).then(res => res.data);
+  if (messages.length === 0) return []
+
+  const batches = messages.reduce<{ [converstionId: string]: IConversationMessage[] }>(
+    (res, message) => ({
+      ...res,
+      [message.conversationId]: [...(res[message.conversationId] || []), message],
+    }),
+    {},
+  );
+
+  const conversations : IConversation[] = [];
+  for (const conversationId in batches) {
+    const messages = batches[conversationId];
+    const attendees = [...new Set(messages.flatMap(({ emitter, targets }) => [emitter, ...targets]))];
+    const targets = attendees.filter((id) => id !== connectedUser._id);
+    conversations.push({
+      _id: conversationId,
+      targets: targets,
+      messages: messages,
+      updatedAt: getLastMessageDate(messages),
+      unseenMessages: 0
+    })
+  }
+  return conversations;
+}
+
+function getLastMessageDate(messages: IConversationMessage[]) {
+  return messages[messages.length - 1].createdAt;
 }

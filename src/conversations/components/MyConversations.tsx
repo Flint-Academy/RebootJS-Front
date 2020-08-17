@@ -8,7 +8,7 @@ import { IConversation, IConversationsStatus } from '../types';
 import { ConversationListItem } from './ConversationListItem';
 import { Loading } from '../../layout/utils/Loading';
 import { Link, withRouter } from 'react-router-dom';
-import { getConversations } from '../../api/methods';
+import { getConversations, getConnectedProfile } from '../../api/methods';
 import { IUserInfo } from '../../users/types';
 
 export interface IConversationListProps {
@@ -41,9 +41,10 @@ class ConversationList extends React.Component<IConversationListProps, IConversa
     }
   }
 
-  componentDidMount() {
-    getConversations()
-      .then(conversations => { this.setState({ ...this.state, list: conversations }) })
+  async componentDidMount() {
+    const connectedProfile = await getConnectedProfile();
+    const conversations = await getConversations(connectedProfile);
+    this.setState({ ...this.state, list: conversations })
   }
 
   render() {

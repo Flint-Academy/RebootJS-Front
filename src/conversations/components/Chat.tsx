@@ -6,7 +6,7 @@ import ChatInput from './ChatInput';
 import { IConversation, IConversationsStatus } from '../types';
 import { Alert } from '../../layout/components/Alert';
 import { AttendeeList } from './AttendeeList';
-import { getConversation } from '../../api/methods';
+import { getConversation, getConnectedProfile } from '../../api/methods';
 import { IUserInfo } from '../../users/types';
 import { Loading } from '../../layout/utils/Loading';
 
@@ -28,20 +28,22 @@ class Chat extends React.Component<IChatProps, IChatState>{
     this.state = {};
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-
+  async fetchConversation(){
     if (this.props.match?.params.conversationId) {
-      getConversation(this.props.match?.params.conversationId)
+      const connectedUser = await getConnectedProfile();
+      getConversation(connectedUser, this.props.match?.params.conversationId)
         .then(conversation => { if (this._isMounted) this.setState({ ...this.state, conversation: conversation }) })
     }
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+
+    this.fetchConversation();
+  }
+
   componentWillReceiveProps(){
-    if (this.props.match?.params.conversationId) {
-      getConversation(this.props.match?.params.conversationId)
-        .then(conversation => { if (this._isMounted) this.setState({ ...this.state, conversation: conversation }) })
-    }
+    this.fetchConversation();
   }
 
   componentWillUnmount() {
