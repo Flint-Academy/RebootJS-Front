@@ -24,6 +24,7 @@ export interface IChatState {
 
 class Chat extends React.Component<IChatProps, IChatState>{
   _isMounted: boolean = false;
+  _polling?: NodeJS.Timeout;
 
   constructor(props: IChatProps) {
     super(props);
@@ -46,15 +47,16 @@ class Chat extends React.Component<IChatProps, IChatState>{
   componentDidMount() {
     this._isMounted = true;
 
-    this.fetchConversation();
+    this._polling = setInterval(this.fetchConversation, 5000);
   }
 
-  componentWillReceiveProps(){
+  componentWillReceiveProps() {
     this.fetchConversation();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    if (this._polling) clearTimeout(this._polling);
   }
 
   render() {
