@@ -7,6 +7,7 @@ import { sendMessage } from '../../api/methods';
 interface IChatInputProps {
   conversationId: string;
   targets: string[];
+  updateMessages : () => void;
 }
 
 interface IChatInputState {
@@ -22,6 +23,10 @@ class ChatInput extends React.Component<IChatInputProps, IChatInputState>{
   }
   sendMessage = () => {
     sendMessage(this.props.conversationId, this.props.targets, this.state.messageEdition);
+    this.setState({
+      messageEdition: ''
+    });
+    this.props.updateMessages();
   }
 
   updateMessageEdition = (newMessage: string) => {

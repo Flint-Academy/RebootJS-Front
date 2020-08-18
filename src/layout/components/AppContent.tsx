@@ -18,7 +18,7 @@ export function AppContent({ users }: IAppContentProps) {
         <Route path="/login" component={LoginScreen}/>
         <Route path="/contacts" component={ContactList} />
         <Route path="/profile" component={MyProfile} />
-        <Route path="/conversation/:conversationId" render={(props) => <Chat status="ready" match={props.match} users={users}/> } />
+        <Route path="/conversation/:conversationId"><Chat status="ready" users={users}/></Route>
         <Route path="/" component={LoginScreen} />
       </Switch>
     </Box>

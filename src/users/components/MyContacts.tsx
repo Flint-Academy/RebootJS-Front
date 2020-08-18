@@ -19,7 +19,7 @@ class ContactList extends React.Component<{}, IContactListState> {
   createConversation = async (target: string) =>  {
     const connectedUser = await getConnectedProfile();
     const conversationId = forgeNewConversationId(connectedUser._id, target);
-    return history.push(`/conversation/${conversationId}`);
+    return history.push(`/conversation/${conversationId}?target=${target}`);
   }
 
   render() {

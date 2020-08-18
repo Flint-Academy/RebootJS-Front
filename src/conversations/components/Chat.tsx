@@ -1,6 +1,6 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import React from 'react';
-import { match as Match, Redirect } from 'react-router-dom';
+import { match as Match, Redirect, withRouter } from 'react-router-dom';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import { IConversation, IConversationsStatus } from '../types';
@@ -13,6 +13,8 @@ import { Loading } from '../../layout/utils/Loading';
 export interface IChatProps {
   status: IConversationsStatus;
   match: Match<{ conversationId: string }>;
+  location: any;
+  history: any;
   users: IUserInfo[];
 }
 
@@ -25,13 +27,18 @@ class Chat extends React.Component<IChatProps, IChatState>{
 
   constructor(props: IChatProps) {
     super(props);
+
     this.state = {};
   }
 
-  async fetchConversation(){
+  fetchConversation = async () => {
     if (this.props.match?.params.conversationId) {
       const connectedUser = await getConnectedProfile();
       const conversation = await getConversation(connectedUser, this.props.match?.params.conversationId)
+      if (conversation.targets.length === 0) {
+        const target = new URLSearchParams(this.props.location.search).get('target');
+        conversation.targets = target ? [target] : [];
+      }
       if (this._isMounted) this.setState({ ...this.state, conversation: conversation })
     }
   }
@@ -91,7 +98,7 @@ class Chat extends React.Component<IChatProps, IChatState>{
             />
           </div>
           <div style={{ flexGrow: 0, height: '60px' }}>
-            <ChatInput conversationId={conversationId} targets={conversation.targets} />
+            <ChatInput conversationId={conversationId} targets={conversation.targets} updateMessages={this.fetchConversation} />
           </div>
         </div>
         <div style={{ height: '100%', flexGrow: 0, width: '15%' }}>
@@ -102,4 +109,4 @@ class Chat extends React.Component<IChatProps, IChatState>{
   }
 }
 
-export default Chat;
+export default withRouter(Chat);
