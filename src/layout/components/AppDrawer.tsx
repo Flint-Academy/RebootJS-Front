@@ -8,11 +8,13 @@ import { IDrawerContent } from '../types';
 import ContactList from '../../users/components/MyContacts';
 import { IUserInfo } from '../../users/types';
 import ConversationList from '../../conversations/components/MyConversations';
+import { IConversation } from '../../conversations/types';
 
 export interface IDrawerDisplayProps {
   show: boolean;
   content?: IDrawerContent;
   users: IUserInfo[];
+  conversations: IConversation[];
   hideDrawer: () => void;
 }
 
@@ -38,13 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export function AppDrawer({ show, content, users, hideDrawer }: IDrawerDisplayProps) {
+export function AppDrawer({ show, content, users, conversations, hideDrawer }: IDrawerDisplayProps) {
   const { drawerHeader, paper, drawerContent } = useStyles();
   const contentDisplay =
     content === 'contacts' ? (
       <ContactList />
     ) : content === 'conversations' ? (
-      <ConversationList status="ready" users={users}/>
+      <ConversationList conversations={conversations} status="ready" users={users}/>
     ) : content === 'call' ? (
       <h1>Here will appear our call in progress</h1>
     ) : null;

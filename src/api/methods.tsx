@@ -128,7 +128,7 @@ export async function getConversations(connectedUser: IProfile): Promise<IConver
       targets: targets,
       messages: messages,
       updatedAt: getLastMessageDate(messages),
-      unseenMessages: countUnseenMessages(lastSeen, messages),
+      unseenMessages: countUnseenMessages(connectedUser._id, lastSeen, messages),
     })
   }
   return conversations;
@@ -150,7 +150,7 @@ function getLastMessageDate(messages: IConversationMessage[]) {
   return messages[messages.length - 1].createdAt;
 }
 
-function countUnseenMessages(lastSeen: string | undefined, messages: IConversationMessage[]) : number{
+function countUnseenMessages(connectedUserId: string, lastSeen: string | undefined, messages: IConversationMessage[]) : number{
   if (!lastSeen) return messages.length;
-  return messages.filter(({ createdAt }) => createdAt > lastSeen).length;
+  return messages.filter(({ createdAt, emitter }) => emitter !== connectedUserId && createdAt > lastSeen).length;
 }

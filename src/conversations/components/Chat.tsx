@@ -16,6 +16,7 @@ export interface IChatProps {
   location: any;
   history: any;
   users: IUserInfo[];
+  updateConversations: () => void;
 }
 
 export interface IChatState {
@@ -24,7 +25,6 @@ export interface IChatState {
 
 class Chat extends React.Component<IChatProps, IChatState>{
   _isMounted: boolean = false;
-  _polling?: NodeJS.Timeout;
 
   constructor(props: IChatProps) {
     super(props);
@@ -41,13 +41,12 @@ class Chat extends React.Component<IChatProps, IChatState>{
         conversation.targets = target ? [target] : [];
       }
       if (this._isMounted) this.setState({ ...this.state, conversation: conversation })
+      this.props.updateConversations();
     }
   }
 
   componentDidMount() {
     this._isMounted = true;
-
-    this._polling = setInterval(this.fetchConversation, 5000);
   }
 
   componentWillReceiveProps() {
@@ -56,7 +55,6 @@ class Chat extends React.Component<IChatProps, IChatState>{
 
   componentWillUnmount() {
     this._isMounted = false;
-    if (this._polling) clearTimeout(this._polling);
   }
 
   render() {
@@ -100,7 +98,7 @@ class Chat extends React.Component<IChatProps, IChatState>{
             />
           </div>
           <div style={{ flexGrow: 0, height: '60px' }}>
-            <ChatInput conversationId={conversationId} targets={conversation.targets} updateMessages={this.fetchConversation} />
+            <ChatInput conversationId={conversationId} targets={conversation.targets} updateMessages={this.props.updateConversations} />
           </div>
         </div>
         <div style={{ height: '100%', flexGrow: 0, width: '15%' }}>

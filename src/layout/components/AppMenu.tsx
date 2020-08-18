@@ -10,10 +10,11 @@ import MyConversationsButton from '../../conversations/components/MyConversation
 import { ProfileButton } from './ProfileButton';
 
 interface IAppMenuProps {
+  unseenMessages: number;
   changeDrawerContent: (content: IDrawerContent) => void;
 }
 
-export function AppMenu({ changeDrawerContent } : IAppMenuProps){
+export function AppMenu({ unseenMessages, changeDrawerContent } : IAppMenuProps){
   return (
     <Fragment>
       <AppBar position="static" style={{ height: '10vh' }}>
@@ -26,7 +27,7 @@ export function AppMenu({ changeDrawerContent } : IAppMenuProps){
           </Grid>
           <Grid item>
             <Toolbar>
-              <MyConversationsButton showConversationList={() => changeDrawerContent('conversations')}/>
+              <MyConversationsButton unseenMessages={unseenMessages} showConversationList={() => changeDrawerContent('conversations')}/>
               <ContactListButton showContactList={() => changeDrawerContent('contacts')}/>
               <ProfileButton />
             </Toolbar>

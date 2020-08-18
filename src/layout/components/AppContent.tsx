@@ -9,16 +9,17 @@ import { IUserInfo } from '../../users/types';
 
 export interface IAppContentProps {
   users: IUserInfo[];
+  updateConversations: () => void;
 }
 
-export function AppContent({ users }: IAppContentProps) {
+export function AppContent({ users, updateConversations }: IAppContentProps) {
   return (
     <Box style={{ height: '90vh' }}>
       <Switch>
         <Route path="/login" component={LoginScreen}/>
         <Route path="/contacts" component={ContactList} />
         <Route path="/profile" component={MyProfile} />
-        <Route path="/conversation/:conversationId"><Chat status="ready" users={users}/></Route>
+        <Route path="/conversation/:conversationId"><Chat updateConversations={updateConversations} status="ready" users={users}/></Route>
         <Route path="/" component={LoginScreen} />
       </Switch>
     </Box>
