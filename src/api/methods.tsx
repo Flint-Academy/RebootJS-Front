@@ -133,6 +133,18 @@ export async function getConversations(connectedUser: IProfile): Promise<IConver
   return conversations;
 }
 
+export async function conversationSeen(conversationId: string) : Promise<IProfile> {
+  const userProfile = await axios.patch(
+    `${process.env.REACT_APP_BACKEND}/users/conversations-seen`,
+    {
+      conversationId: conversationId,
+      seenDate: new Date().toISOString(),
+    },
+    { withCredentials: true }
+  ).then(res => res.data)
+  return userProfile;
+}
+
 function getLastMessageDate(messages: IConversationMessage[]) {
   return messages[messages.length - 1].createdAt;
 }

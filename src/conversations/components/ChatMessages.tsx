@@ -4,6 +4,7 @@ import React, { Fragment, RefObject } from 'react';
 import { IConversationMessage } from '../types';
 import { ChatMessage } from './ChatMessage';
 import { IUserInfo } from '../../users/types';
+import { conversationSeen } from '../../api/methods';
 
 export interface IChatMessagesProps {
   conversationId?: string;
@@ -15,10 +16,15 @@ class ChatMessages extends React.Component<IChatMessagesProps>{
   ref: RefObject<HTMLElement> = {current: null}
 
   conversationSeen = (id: string) => {
-    console.log("conversation XX seen");
+    conversationSeen(id);
   }
 
   componentDidMount(){
+    if (this.props.conversationId) this.conversationSeen(this.props.conversationId);
+    this.ref.current?.scrollIntoView(false);
+  }
+
+  componentDidUpdate(){
     if (this.props.conversationId) this.conversationSeen(this.props.conversationId);
     this.ref.current?.scrollIntoView(false);
   }
