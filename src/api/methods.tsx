@@ -122,12 +122,13 @@ export async function getConversations(connectedUser: IProfile): Promise<IConver
     const messages = batches[conversationId];
     const attendees = [...new Set(messages.flatMap(({ emitter, targets }) => [emitter, ...targets]))];
     const targets = attendees.filter((id) => id !== connectedUser._id);
+    const lastSeen = connectedUser.conversationsSeen?.[conversationId];
     conversations.push({
       _id: conversationId,
       targets: targets,
       messages: messages,
       updatedAt: getLastMessageDate(messages),
-      unseenMessages: 0
+      unseenMessages: countUnseenMessages(lastSeen, messages),
     })
   }
   return conversations;
@@ -147,4 +148,9 @@ export async function conversationSeen(conversationId: string) : Promise<IProfil
 
 function getLastMessageDate(messages: IConversationMessage[]) {
   return messages[messages.length - 1].createdAt;
+}
+
+function countUnseenMessages(lastSeen: string | undefined, messages: IConversationMessage[]) : number{
+  if (!lastSeen) return messages.length;
+  return messages.filter(({ createdAt }) => createdAt > lastSeen).length;
 }

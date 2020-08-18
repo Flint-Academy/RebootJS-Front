@@ -7,6 +7,7 @@ import React, { Fragment } from 'react';
 import { IDrawerContent } from '../types';
 import ContactListButton from './ContactListButton';
 import MyConversationsButton from '../../conversations/components/MyConversationsButton';
+import { ProfileButton } from './ProfileButton';
 
 interface IAppMenuProps {
   changeDrawerContent: (content: IDrawerContent) => void;
@@ -27,6 +28,7 @@ export function AppMenu({ changeDrawerContent } : IAppMenuProps){
             <Toolbar>
               <MyConversationsButton showConversationList={() => changeDrawerContent('conversations')}/>
               <ContactListButton showContactList={() => changeDrawerContent('contacts')}/>
+              <ProfileButton />
             </Toolbar>
           </Grid>
         </Grid>
