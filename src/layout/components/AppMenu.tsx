@@ -8,6 +8,7 @@ import { IDrawerContent } from '../types';
 import ContactListButton from './ContactListButton';
 import MyConversationsButton from '../../conversations/components/MyConversationsButton';
 import { ProfileButton } from './ProfileButton';
+import NavBarName from '../../identity/components/NavBarName';
 
 interface IAppMenuProps {
   unseenMessages: number;
@@ -23,6 +24,11 @@ export function AppMenu({ unseenMessages, changeDrawerContent } : IAppMenuProps)
             <Toolbar>
               <Forum fontSize="large" />
               <Typography variant="h3">flint.</Typography>
+            </Toolbar>
+          </Grid>
+          <Grid item>
+            <Toolbar>
+              <NavBarName />
             </Toolbar>
           </Grid>
           <Grid item>
