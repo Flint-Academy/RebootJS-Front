@@ -3,10 +3,11 @@ import React from 'react';
 import { AppMenu } from './AppMenu';
 import { AppContent } from './AppContent';
 import { AppDrawer, drawerWidth } from './AppDrawer';
-import { IDrawerContent } from '../types';
 import { getUsers, getConnectedProfile, getConversations } from '../../api/methods';
 import { IUserInfo } from '../../users/types';
 import { IConversation } from '../../conversations/types';
+import { IAppState } from '../../appReducer';
+import { connect } from 'react-redux';
 
 const styles = (theme: Theme) =>
 createStyles({
@@ -31,12 +32,11 @@ createStyles({
 });
 
 interface AppLayoutProps {
-  classes: any
+  classes: any,
+  showDrawer: boolean,
 }
 
 interface AppLayoutState {
-  showDrawer: boolean;
-  drawerContent?: IDrawerContent;
   conversations: IConversation[];
   users: IUserInfo[];
 }
@@ -47,7 +47,6 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
   constructor(props: AppLayoutProps){
     super(props);
     this.state = {
-      showDrawer: false,
       conversations: [],
       users: []
     }
@@ -72,26 +71,22 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
     this.setState({ ...this.state, conversations: conversations });
   }
 
-  changeDrawerContent = (newContent: IDrawerContent) => {
-    this.setState({showDrawer: true, drawerContent: newContent})
-  }
-
-  hideDrawer = () => {
-    this.setState({...this.state, showDrawer: false});
-  }
-
   render() {
-    const { classes } = this.props;
-    const contentClasses = [classes.content, this.state.showDrawer && classes.contentShift].filter(Boolean).join(' ');    return (
+    const { classes, showDrawer } = this.props;
+    const contentClasses = [classes.content, showDrawer && classes.contentShift].filter(Boolean).join(' ');    return (
       <div>
         <div className={contentClasses}>
-          <AppMenu unseenMessages={this.state.conversations.reduce((acc, conv) => acc + conv.unseenMessages, 0)} changeDrawerContent={this.changeDrawerContent} />
+          <AppMenu unseenMessages={this.state.conversations.reduce((acc, conv) => acc + conv.unseenMessages, 0)} />
           <AppContent updateConversations={this.updateConversations} users={this.state.users} />
         </div>
-        <AppDrawer conversations={this.state.conversations} users={this.state.users} show={this.state.showDrawer} hideDrawer={this.hideDrawer} content={this.state.drawerContent}/>
+        <AppDrawer conversations={this.state.conversations} users={this.state.users}/>
       </div>
     );
   }
 }
 
-export default withStyles(styles)(AppLayout);
+const mapStateToProps = ({ layout } : IAppState ) => ({
+  showDrawer: layout.showDrawer,
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(AppLayout));

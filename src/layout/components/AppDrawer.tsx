@@ -4,11 +4,15 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import React from 'react';
+import { Dispatch, Action } from 'redux';
 import { IDrawerContent } from '../types';
 import ContactList from '../../users/components/MyContacts';
 import { IUserInfo } from '../../users/types';
 import ConversationList from '../../conversations/components/MyConversations';
 import { IConversation } from '../../conversations/types';
+import { IAppState } from '../../appReducer';
+import { connect } from 'react-redux';
+import { hideDrawer } from '../actions/hideDrawer';
 
 export interface IDrawerDisplayProps {
   show: boolean;
@@ -40,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export function AppDrawer({ show, content, users, conversations, hideDrawer }: IDrawerDisplayProps) {
+export function AppDrawerComponent({ show, content, users, conversations, hideDrawer }: IDrawerDisplayProps) {
   const { drawerHeader, paper, drawerContent } = useStyles();
   const contentDisplay =
     content === 'contacts' ? (
@@ -61,3 +65,14 @@ export function AppDrawer({ show, content, users, conversations, hideDrawer }: I
     </Drawer>
   );
 }
+
+const mapStateToProps = ({ layout }: IAppState) => ({
+  show: layout.showDrawer,
+  content: layout.drawerContent,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  hideDrawer: () => dispatch(hideDrawer()),
+})
+
+export const AppDrawer = connect(mapStateToProps, mapDispatchToProps)(AppDrawerComponent);

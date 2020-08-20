@@ -4,7 +4,6 @@ import Forum from '@material-ui/icons/Forum';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import React, { Fragment } from 'react';
-import { IDrawerContent } from '../types';
 import ContactListButton from './ContactListButton';
 import MyConversationsButton from '../../conversations/components/MyConversationsButton';
 import { ProfileButton } from './ProfileButton';
@@ -12,10 +11,9 @@ import NavBarName from '../../identity/components/NavBarName';
 
 interface IAppMenuProps {
   unseenMessages: number;
-  changeDrawerContent: (content: IDrawerContent) => void;
 }
 
-export function AppMenu({ unseenMessages, changeDrawerContent } : IAppMenuProps){
+export function AppMenu({ unseenMessages } : IAppMenuProps){
   return (
     <Fragment>
       <AppBar position="static" style={{ height: '10vh' }}>
@@ -33,8 +31,8 @@ export function AppMenu({ unseenMessages, changeDrawerContent } : IAppMenuProps)
           </Grid>
           <Grid item>
             <Toolbar>
-              <MyConversationsButton unseenMessages={unseenMessages} showConversationList={() => changeDrawerContent('conversations')}/>
-              <ContactListButton showContactList={() => changeDrawerContent('contacts')}/>
+              <MyConversationsButton unseenMessages={unseenMessages}/>
+              <ContactListButton />
               <ProfileButton />
             </Toolbar>
           </Grid>

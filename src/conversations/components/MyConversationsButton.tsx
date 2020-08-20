@@ -2,6 +2,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Forum from '@material-ui/icons/Forum';
 import React from 'react';
 import { Badge } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { makeShowConversationList } from '../actions/makeShowConversationList';
 
 interface IShowConversationsButtonProps {
   unseenMessages: number;
@@ -18,4 +20,9 @@ export function MyConversationsButton({ unseenMessages, showConversationList }: 
   );
 }
 
-export default MyConversationsButton;
+const mapStateToProps = () => ({})
+const mapDispatchToProps = (dispatch: any) => ({
+  showConversationList: () => dispatch(makeShowConversationList()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyConversationsButton);
