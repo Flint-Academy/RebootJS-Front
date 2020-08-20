@@ -11,3 +11,16 @@ export interface IProfile {
   updatedAt: string;
   conversationsSeen?: { [conversationId: string]: string };
 }
+
+export const UPDATE_IDENTITY = 'UPDATE_IDENTITY';
+
+export interface IUpdateIdentityAction {
+  type: typeof UPDATE_IDENTITY;
+  info: Partial<IProfile>;
+}
+
+export interface IIdentityState {
+  info?: IProfile;
+}
+
+export type IIdentityAction =  IUpdateIdentityAction;

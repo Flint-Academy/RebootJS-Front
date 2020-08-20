@@ -8,7 +8,7 @@ export async function getUsers(): Promise<IUserInfo[]> {
   return resp.data.users;
 }
 
-export async function login(email: string, password: string): Promise<string> {
+export async function loginUser(email: string, password: string): Promise<IProfile> {
   const resp = await axios.post(
     `${process.env.REACT_APP_BACKEND}/login`,
     {

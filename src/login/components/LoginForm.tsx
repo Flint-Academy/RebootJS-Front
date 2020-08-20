@@ -4,58 +4,38 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
+import { connect } from 'react-redux';
 import { ILoginForm, ILoginStatus } from '../types';
 import { Alert } from '../../layout/components/Alert';
 import { IFormField } from '../../profileForm/types';
-import { login } from '../../api/methods';
-import history from '../../history';
+import { IAppState } from '../../appReducer';
+import { makeSubmitLogin } from '../actions/makeSubmitLogin';
+import { loginUpdateForm } from '../actions/loginUpdateForm';
 
 interface ILoginFormProps {
-  email?: IFormField<string>;
-  password?: IFormField<string>;
-}
-
-interface ILoginFormState {
   email: IFormField<string>;
   password: IFormField<string>;
   status: ILoginStatus;
+  update<T extends keyof ILoginForm>(field: T, value: string): void;
+  submit(): void;
 }
 
-class LoginForm extends React.Component<ILoginFormProps, ILoginFormState>{
-  constructor(props: ILoginFormProps){
-    super(props);
-    this.state = {
-      email: this.props.email || { value: '', isValid: true },
-      password: this.props.password || { value: '', isValid: true},
-      status: 'ready',
-    }
-  }
-
-
-  update = <T extends keyof ILoginForm>(field: T, value: string): void => {
-    this.setState({...this.state, [field]: { ...this.state[field], value: value }})
-  }
-
-  submit = async (): Promise<void> => {
-    await login(this.state.email.value, this.state.password.value);
-    history.push(`/profile`);
-  }
-
+class LoginForm extends React.Component<ILoginFormProps>{
   render(){
-    const { status, email, password } = this.state;
+    const { status, email, password, update, submit } = this.props;
     return (
       <Container maxWidth="xs">
         <Box style={{ margin: '2rem 0' }}>
           <Alert status={status} />
         </Box>
-        <form onSubmit={(e) => { e.preventDefault(); this.submit()}}>
+        <form onSubmit={(e) => { e.preventDefault(); submit()}}>
           <Box style={{ margin: '2rem 0' }}>
             <TextField
               label="Email"
               value={email.value}
               required={true}
               fullWidth={true}
-              onChange={(event) => this.update('email', event.target.value)}
+              onChange={(event) => update('email', event.target.value)}
               {...(!email.isValid ? { error: true, helperText: email.error } : {})}
             />
             <TextField
@@ -64,7 +44,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState>{
               value={password.value}
               required={true}
               fullWidth={true}
-              onChange={(event) => this.update('password', event.target.value)}
+              onChange={(event) => update('password', event.target.value)}
               {...(!password.isValid ? { error: true, helperText: password.error } : {})}
             />
           </Box>
@@ -83,4 +63,14 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState>{
   }
 }
 
-export default LoginForm;
+const mapStateToProps = ({login}: IAppState) => ({
+  status: login.status,
+  ...login.form
+})
+
+const mapDispatchToProps = (dispatch: any) => ({
+  update: <T extends keyof ILoginForm>(field: T, value: string) => dispatch(loginUpdateForm(field, value)),
+  submit: () => dispatch(makeSubmitLogin())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

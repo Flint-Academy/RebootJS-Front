@@ -9,6 +9,7 @@ import { CredentialsSection } from './CredentialsSection';
 import { Alert } from '../../layout/components/Alert';
 import history from '../../history';
 import { updateProfileForm, createNewProfile } from '../utils/profileActions';
+import { defaultProfileFormState } from '../utils/defaultProfileFormState';
 
 export interface IRegistrationDisplayFormState {
   status: IProfileFormStatus;
@@ -18,24 +19,7 @@ export interface IRegistrationDisplayFormState {
 class RegistrationForm extends React.Component<{}, IRegistrationDisplayFormState> {
   constructor(props: {}) {
     super(props);
-    this.state = {
-      status: 'ready',
-      fields: {
-        email: { value: '', isValid: true },
-        firstname: { value: '', isValid: true },
-        lastname: { value: '', isValid: true },
-        password: {
-          value: '',
-          isValid: true,
-          hasLower: false,
-          hasUpper: false,
-          hasNumber: false,
-          hasSymbol: false,
-          hasValidLength: false
-        },
-        confirmation: { value: '', isValid: true },
-      }
-    }
+    this.state = defaultProfileFormState();
   };
 
   update = <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void => {
