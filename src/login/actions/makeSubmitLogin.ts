@@ -1,7 +1,7 @@
 import { loginUser } from '../../api/methods';
 import history from '../../history';
-import { updateIdentity } from '../../identity/actions/updateIdentity';
 import { IAppState } from '../../appReducer';
+import { makeInitApp } from '../../layout/actions/makeInitApp';
 
 export const makeSubmitLogin = () => {
   return async (dispatch: any, getState: () => IAppState) => {
@@ -14,7 +14,7 @@ export const makeSubmitLogin = () => {
       }
 
       const profile = await loginUser(email.value, password.value);
-      dispatch(updateIdentity(profile))
+      dispatch(makeInitApp(profile));
       history.push(`/profile`);
     } catch {
       console.log("For now let's just print that there has been an error");
