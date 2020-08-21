@@ -8,13 +8,13 @@ import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { IIdentityStatus, IProfile } from '../../identity/types';
 import { Alert } from '../../layout/components/Alert';
-import { deleteProfile, saveUpdatedProfile } from '../utils/profileActions';
-import history from '../../history';
-import { logout } from '../../api/methods';
+import { saveUpdatedProfile } from '../utils/profileActions';
 import { connect } from 'react-redux';
 import { IAppState } from '../../appReducer';
 import { makeResetProfileForm } from '../actions/makeResetProfileForm';
 import { updateProfileForm } from '../actions/updateProfileForm';
+import { makeLogout } from '../actions/makeLogout';
+import { makeDeleteProfile } from '../actions/makeDeleteProfile';
 
 export interface IProfileFormProps {
   identityStatus: IIdentityStatus;
@@ -23,6 +23,8 @@ export interface IProfileFormProps {
   profile?: IProfile;
   update<T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void;
   resetProfile(): void;
+  logout(): void;
+  deleteProfile(): void;
 }
 
 
@@ -34,22 +36,12 @@ class MyProfile extends React.Component<IProfileFormProps>{
     }
   };
 
-  deleteProfile = async (): Promise<void> => {
-    await deleteProfile();
-    history.push('/');
-  };
-
-  logout = async (): Promise<void> => {
-    await logout()
-    history.push('/');
-  }
-
   componentDidMount(){
     this.props.resetProfile();
   }
 
   render() {
-    const { identityStatus, formStatus, fields, update, resetProfile } = this.props
+    const { identityStatus, formStatus, fields, update, resetProfile, logout, deleteProfile } = this.props
     const { email, firstname, lastname, password, confirmation } = fields;
     if ([identityStatus, formStatus].includes('unavailable')) return <h1>Unavailable, please wait</h1>;
     return (
@@ -60,12 +52,12 @@ class MyProfile extends React.Component<IProfileFormProps>{
         <Box style={{ margin: '2rem 0' }}>
           <Grid container justify="flex-end">
             <Grid item xs={2}>
-              <Button variant="contained" color="secondary" fullWidth={true} onClick={this.logout}>
+              <Button variant="contained" color="secondary" fullWidth={true} onClick={logout}>
                 Logout
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="contained" color="secondary" fullWidth={true} onClick={this.deleteProfile}>
+              <Button variant="contained" color="secondary" fullWidth={true} onClick={deleteProfile}>
                 Delete account
               </Button>
             </Grid>
@@ -120,6 +112,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   update: <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']) =>
     dispatch(updateProfileForm(field, value)),
   resetProfile: () => dispatch(makeResetProfileForm()),
+  logout: () => dispatch(makeLogout()),
+  deleteProfile: () => dispatch(makeDeleteProfile()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);
