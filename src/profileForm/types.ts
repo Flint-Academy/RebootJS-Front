@@ -28,5 +28,24 @@ export interface IProfileFormFields {
 
 export interface IProfileFormState {
   status: IProfileFormStatus;
+  optionalPassword?: boolean;
   fields: IProfileFormFields;
 }
+
+export const UPDATE_PROFILE_FORM = 'UPDATE_PROFILE_FORM';
+export const RESET_PROFILE_FORM_CONTENT = 'RESET_PROFILE_FORM_CONTENT';
+
+export interface IUpdateProfileFormAction<T extends keyof IProfileFormFields> {
+  type: typeof UPDATE_PROFILE_FORM;
+  field: T;
+  value: IProfileFormFields[T]['value'];
+}
+
+export interface IResetProfileFormContentAction {
+  type: typeof RESET_PROFILE_FORM_CONTENT;
+  info?: IProfile;
+}
+
+export type IProfileFormAction =
+  | IUpdateProfileFormAction<any>
+  | IResetProfileFormContentAction;

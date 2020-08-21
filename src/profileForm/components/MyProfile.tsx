@@ -8,70 +8,30 @@ import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { IIdentityStatus, IProfile } from '../../identity/types';
 import { Alert } from '../../layout/components/Alert';
-import { updateProfileForm, deleteProfile, saveUpdatedProfile } from '../utils/profileActions';
+import { deleteProfile, saveUpdatedProfile } from '../utils/profileActions';
 import history from '../../history';
-import { getConnectedProfile, logout } from '../../api/methods';
+import { logout } from '../../api/methods';
+import { connect } from 'react-redux';
+import { IAppState } from '../../appReducer';
+import { makeResetProfileForm } from '../actions/makeResetProfileForm';
+import { updateProfileForm } from '../actions/updateProfileForm';
 
-export interface IProfileFormState {
+export interface IProfileFormProps {
   identityStatus: IIdentityStatus;
   formStatus: IProfileFormStatus;
   fields: IProfileFormFields;
   profile?: IProfile;
+  update<T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void;
+  resetProfile(): void;
 }
 
 
-class MyProfile extends React.Component<{}, IProfileFormState>{
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      identityStatus: 'ready',
-      formStatus: 'ready',
-      fields: {
-        email: { value: '', isValid: true },
-        firstname: { value: '', isValid: true },
-        lastname: { value: '', isValid: true },
-        password: {
-          value: '',
-          isValid: true,
-          hasLower: false,
-          hasUpper: false,
-          hasNumber: false,
-          hasSymbol: false,
-          hasValidLength: false
-        },
-        confirmation: { value: '', isValid: true },
-      }
-    }
-  }
-
-  async componentDidMount() {
-    const user = await getConnectedProfile()
-    this.setState({ ...this.state, profile: user });
-    this.resetProfile();
-  }
-
-  update = <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void => {
-    this.setState(updateProfileForm(this.state, field, value));
-  };
-
+class MyProfile extends React.Component<IProfileFormProps>{
   saveProfile = async (): Promise<void> => {
-    if (this.state.profile) {
-      const user = await saveUpdatedProfile(this.state.fields, this.state.profile)
-      this.setState({ ...this.state, profile: user })
-      this.resetProfile();
+    if (this.props.profile) {
+      await saveUpdatedProfile(this.props.fields, this.props.profile)
+      this.props.resetProfile();
     }
-  };
-
-  resetProfile = (): void => {
-    this.setState({
-      ...this.state,
-      fields: {
-        ...this.state.fields,
-        email: { value: this.state.profile?.email || '', isValid: true },
-        firstname: { value: this.state.profile?.firstname || '', isValid: true },
-        lastname: { value: this.state.profile?.lastname || '', isValid: true }
-      }
-    })
   };
 
   deleteProfile = async (): Promise<void> => {
@@ -84,8 +44,12 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
     history.push('/');
   }
 
+  componentDidMount(){
+    this.props.resetProfile();
+  }
+
   render() {
-    const { identityStatus, formStatus, fields } = this.state
+    const { identityStatus, formStatus, fields, update, resetProfile } = this.props
     const { email, firstname, lastname, password, confirmation } = fields;
     if ([identityStatus, formStatus].includes('unavailable')) return <h1>Unavailable, please wait</h1>;
     return (
@@ -116,18 +80,18 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
                   email={email}
                   firstname={firstname}
                   lastname={lastname}
-                  update={this.update}
+                  update={update}
                 />
               </Grid>
               <Grid item xs={4}>
-                <CredentialsSection password={password} confirmation={confirmation} update={this.update} />
+                <CredentialsSection password={password} confirmation={confirmation} update={update} />
               </Grid>
             </Grid>
           </Box>
           <Box style={{ margin: '2rem 0' }}>
             <Grid container justify="space-between">
               <Grid item xs={2}>
-                <Button variant="contained" fullWidth={true} onClick={this.resetProfile}>
+                <Button variant="contained" fullWidth={true} onClick={resetProfile}>
                   Reset
                 </Button>
               </Grid>
@@ -144,4 +108,18 @@ class MyProfile extends React.Component<{}, IProfileFormState>{
   }
 }
 
-export default MyProfile
+const mapStateToProps = ({ identity, profileForm }: IAppState) => ({
+  identityStatus: identity.status,
+  profile: identity.info,
+  formStatus: profileForm.status,
+  optionalPassword: profileForm.optionalPassword,
+  fields: profileForm.fields,
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  update: <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']) =>
+    dispatch(updateProfileForm(field, value)),
+  resetProfile: () => dispatch(makeResetProfileForm()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);

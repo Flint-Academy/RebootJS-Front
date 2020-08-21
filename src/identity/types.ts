@@ -20,6 +20,7 @@ export interface IUpdateIdentityAction {
 }
 
 export interface IIdentityState {
+  status: IIdentityStatus;
   info?: IProfile;
 }
 
