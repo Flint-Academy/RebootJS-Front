@@ -8,13 +8,13 @@ import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { IIdentityStatus, IProfile } from '../../identity/types';
 import { Alert } from '../../layout/components/Alert';
-import { saveUpdatedProfile } from '../utils/profileActions';
 import { connect } from 'react-redux';
 import { IAppState } from '../../appReducer';
 import { makeResetProfileForm } from '../actions/makeResetProfileForm';
 import { updateProfileForm } from '../actions/updateProfileForm';
 import { makeLogout } from '../actions/makeLogout';
 import { makeDeleteProfile } from '../actions/makeDeleteProfile';
+import { makeSaveProfileForm } from '../actions/makeSaveProfileForm';
 
 export interface IProfileFormProps {
   identityStatus: IIdentityStatus;
@@ -25,23 +25,17 @@ export interface IProfileFormProps {
   resetProfile(): void;
   logout(): void;
   deleteProfile(): void;
+  saveProfile(): void;
 }
 
 
 class MyProfile extends React.Component<IProfileFormProps>{
-  saveProfile = async (): Promise<void> => {
-    if (this.props.profile) {
-      await saveUpdatedProfile(this.props.fields, this.props.profile)
-      this.props.resetProfile();
-    }
-  };
-
   componentDidMount(){
     this.props.resetProfile();
   }
 
   render() {
-    const { identityStatus, formStatus, fields, update, resetProfile, logout, deleteProfile } = this.props
+    const { identityStatus, formStatus, fields, update, resetProfile, logout, deleteProfile, saveProfile } = this.props
     const { email, firstname, lastname, password, confirmation } = fields;
     if ([identityStatus, formStatus].includes('unavailable')) return <h1>Unavailable, please wait</h1>;
     return (
@@ -63,7 +57,7 @@ class MyProfile extends React.Component<IProfileFormProps>{
             </Grid>
           </Grid>
         </Box>
-        <form onSubmit={(e) => { e.preventDefault(); this.saveProfile() }}>
+        <form onSubmit={(e) => { e.preventDefault(); saveProfile() }}>
           <Box style={{ margin: '2rem 0' }}>
             <Grid container justify="space-evenly" alignItems="flex-start">
               <Grid item xs={4}>
@@ -113,6 +107,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(updateProfileForm(field, value)),
   resetProfile: () => dispatch(makeResetProfileForm()),
   logout: () => dispatch(makeLogout()),
+  saveProfile: () => dispatch(makeSaveProfileForm()),
   deleteProfile: () => dispatch(makeDeleteProfile()),
 });
 

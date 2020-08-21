@@ -7,38 +7,31 @@ import { IProfileFormFields, IProfileFormStatus } from '../types';
 import { IdentitySection } from './IdentitySection';
 import { CredentialsSection } from './CredentialsSection';
 import { Alert } from '../../layout/components/Alert';
-import history from '../../history';
-import { updateProfileForm, createNewProfile } from '../utils/profileActions';
-import { defaultProfileFormState } from '../utils/defaultProfileFormState';
+import { connect } from 'react-redux';
+import { IAppState } from '../../appReducer';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action } from 'redux';
+import { updateProfileForm } from '../actions/updateProfileForm';
+import { makeSubmitRegistrationForm } from '../actions/makeSubmitRegistrationForm';
 
-export interface IRegistrationDisplayFormState {
+export interface IRegistrationFormProps {
   status: IProfileFormStatus;
   fields: IProfileFormFields;
+  update<T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void;
+  saveProfile(): void;
 }
 
-class RegistrationForm extends React.Component<{}, IRegistrationDisplayFormState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = defaultProfileFormState();
-  };
 
-  update = <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']): void => {
-    this.setState(updateProfileForm(this.state, field, value));
-  }
-
-  saveProfile = async (): Promise<void> => {
-    const profile = await createNewProfile(this.state.fields);
-    history.push(`profile/${profile._id}`);
-  }
-
+class RegistrationForm extends React.Component<IRegistrationFormProps> {
   render() {
-    const { email, firstname, lastname, password, confirmation } = this.state.fields;
+    const { update, saveProfile, fields, status } = this.props;
+    const { email, firstname, lastname, password, confirmation } = fields;
     return (
       <Container>
         <Box style={{ margin: '2rem 0' }}>
-          <Alert status={this.state.status} />
+          <Alert status={status} />
         </Box>
-        <form onSubmit={(e) => { e.preventDefault(); this.saveProfile() }}>
+        <form onSubmit={(e) => { e.preventDefault(); saveProfile() }}>
           <Box style={{ margin: '2rem 0' }}>
             <Grid container justify="space-evenly" alignItems="flex-start">
               <Grid item xs={4}>
@@ -47,11 +40,11 @@ class RegistrationForm extends React.Component<{}, IRegistrationDisplayFormState
                   email={email}
                   firstname={firstname}
                   lastname={lastname}
-                  update={this.update}
+                  update={update}
                 />
               </Grid>
               <Grid item xs={4}>
-                <CredentialsSection password={password} confirmation={confirmation} update={this.update} />
+                <CredentialsSection password={password} confirmation={confirmation} update={update} />
               </Grid>
             </Grid>
           </Box>
@@ -70,4 +63,15 @@ class RegistrationForm extends React.Component<{}, IRegistrationDisplayFormState
   }
 }
 
-export default RegistrationForm
+const mapStateToProps = ({ profileForm }: IAppState) => ({
+  status: profileForm.status,
+  fields: profileForm.fields,
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<IAppState, void, Action>) => ({
+  update: <T extends keyof IProfileFormFields>(field: T, value: IProfileFormFields[T]['value']) =>
+    dispatch(updateProfileForm(field, value)),
+  saveProfile: () => dispatch(makeSubmitRegistrationForm()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);
