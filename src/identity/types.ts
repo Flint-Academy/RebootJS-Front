@@ -12,16 +12,22 @@ export interface IProfile {
   conversationsSeen?: { [conversationId: string]: string };
 }
 
+export interface IIdentityState {
+  status: IIdentityStatus;
+  info?: IProfile;
+}
+
 export const UPDATE_IDENTITY = 'UPDATE_IDENTITY';
+export const IDENTITY_RESET = 'IDENTITY_RESET';
 
 export interface IUpdateIdentityAction {
   type: typeof UPDATE_IDENTITY;
   info: Partial<IProfile>;
 }
 
-export interface IIdentityState {
-  status: IIdentityStatus;
-  info?: IProfile;
+export interface IIdentityResetAction {
+  type: typeof IDENTITY_RESET;
 }
 
-export type IIdentityAction =  IUpdateIdentityAction;
+export type IIdentityAction =  IUpdateIdentityAction
+  | IIdentityResetAction;

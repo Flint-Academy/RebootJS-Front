@@ -34,6 +34,7 @@ export interface IProfileFormState {
 
 export const UPDATE_PROFILE_FORM = 'UPDATE_PROFILE_FORM';
 export const RESET_PROFILE_FORM_CONTENT = 'RESET_PROFILE_FORM_CONTENT';
+export const PROFILE_FORM_RESET = 'PROFILE_FORM_RESET';
 
 export interface IUpdateProfileFormAction<T extends keyof IProfileFormFields> {
   type: typeof UPDATE_PROFILE_FORM;
@@ -46,6 +47,11 @@ export interface IResetProfileFormContentAction {
   info?: IProfile;
 }
 
+export interface IProfileFormResetAction {
+  type: typeof PROFILE_FORM_RESET;
+}
+
 export type IProfileFormAction =
   | IUpdateProfileFormAction<any>
-  | IResetProfileFormContentAction;
+  | IResetProfileFormContentAction
+  | IProfileFormResetAction;
