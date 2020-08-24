@@ -7,13 +7,15 @@ import { IConversation } from '../types';
 import { PrettyDate } from '../../layout/utils/PrettyDate';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import { IUserInfo } from '../../users/types';
+import { IAppState } from '../../appReducer';
+import { connect } from 'react-redux';
 
 export interface IConversationListItemProps {
   conversation: IConversation;
   users: IUserInfo[];
 }
 
-export function ConversationListItem({ conversation, users }: IConversationListItemProps) {
+function ConversationListItem({ conversation, users }: IConversationListItemProps) {
   const { unseenMessages, messages, targets, updatedAt } = conversation;
   const snippet = messages[messages.length - 1]?.content.substr(0, 25);
   return (
@@ -40,3 +42,9 @@ export function ConversationListItem({ conversation, users }: IConversationListI
     </Fragment>
   );
 }
+
+const mapStateToProps = ({users}:IAppState) => ({
+  users: users.list
+});
+
+export default connect(mapStateToProps)(ConversationListItem);

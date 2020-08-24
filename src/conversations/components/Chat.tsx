@@ -5,9 +5,8 @@ import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import { IConversation, IConversationsStatus } from '../types';
 import { Alert } from '../../layout/components/Alert';
-import { AttendeeList } from './AttendeeList';
+import AttendeeList from './AttendeeList';
 import { getConversation, getConnectedProfile } from '../../api/methods';
-import { IUserInfo } from '../../users/types';
 import { Loading } from '../../layout/utils/Loading';
 
 export interface IChatProps {
@@ -15,7 +14,6 @@ export interface IChatProps {
   match: Match<{ conversationId: string }>;
   location: any;
   history: any;
-  users: IUserInfo[];
   updateConversations: () => void;
 }
 
@@ -63,7 +61,7 @@ class Chat extends React.Component<IChatProps, IChatState>{
     if (!conversation) return <Loading />
     if (!conversationId) return <Redirect to="/profile" />;
 
-    const { status, users } = this.props;
+    const { status } = this.props;
     const progress = status === 'sending' ? <LinearProgress /> : null;
     return (
       <div
@@ -94,7 +92,6 @@ class Chat extends React.Component<IChatProps, IChatState>{
             <ChatMessages
               conversationId={conversationId}
               messages={conversation.messages}
-              users={users}
             />
           </div>
           <div style={{ flexGrow: 0, height: '60px' }}>
@@ -102,7 +99,7 @@ class Chat extends React.Component<IChatProps, IChatState>{
           </div>
         </div>
         <div style={{ height: '100%', flexGrow: 0, width: '15%' }}>
-          <AttendeeList targets={conversation.targets} users={users} />
+          <AttendeeList targets={conversation.targets} />
         </div>
       </div>
     );

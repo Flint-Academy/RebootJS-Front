@@ -5,14 +5,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { IConversation, IConversationsStatus } from '../types';
-import { ConversationListItem } from './ConversationListItem';
+import ConversationListItem from './ConversationListItem';
 import { Loading } from '../../layout/utils/Loading';
 import { Link, withRouter } from 'react-router-dom';
-import { IUserInfo } from '../../users/types';
 
 export interface IConversationListProps {
   status: IConversationsStatus;
-  users: IUserInfo[];
   classes: any;
   match: any;
   location: any;
@@ -51,7 +49,7 @@ class ConversationList extends React.Component<IConversationListProps> {
               to={`/conversation/${conversation._id}`}
               key={conversation._id}
             >
-              <ConversationListItem conversation={conversation} users={this.props.users} />
+              <ConversationListItem conversation={conversation} />
             </ListItem>
           ))}
         </List>

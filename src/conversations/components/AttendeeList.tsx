@@ -6,13 +6,15 @@ import React from 'react';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import { Username } from '../../users/components/Username';
 import { IUserInfo } from '../../users/types';
+import { connect } from 'react-redux';
+import { IAppState } from '../../appReducer';
 
 export interface IAttendeeListProps {
   targets: string[];
   users: IUserInfo[];
 }
 
-export function AttendeeList({ targets, users }: IAttendeeListProps) {
+function AttendeeList({ targets, users }: IAttendeeListProps) {
   return (
     <List>
       {targets.map((target) => {
@@ -30,3 +32,8 @@ export function AttendeeList({ targets, users }: IAttendeeListProps) {
     </List>
   );
 }
+
+const mapStateToProps = ({users}: IAppState) => ({
+  users: users.list
+})
+export default connect(mapStateToProps)(AttendeeList);

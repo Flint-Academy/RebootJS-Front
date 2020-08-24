@@ -3,8 +3,7 @@ import React from 'react';
 import { AppMenu } from './AppMenu';
 import { AppContent } from './AppContent';
 import { AppDrawer, drawerWidth } from './AppDrawer';
-import { getConnectedProfile, getConversations, getUsers } from '../../api/methods';
-import { IUserInfo } from '../../users/types';
+import { getConnectedProfile, getConversations } from '../../api/methods';
 import { IConversation } from '../../conversations/types';
 import { IAppState } from '../../appReducer';
 import { connect } from 'react-redux';
@@ -38,7 +37,6 @@ interface AppLayoutProps {
 
 interface AppLayoutState {
   conversations: IConversation[];
-  users: IUserInfo[];
 }
 
 class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
@@ -48,16 +46,14 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
     super(props);
     this.state = {
       conversations: [],
-      users: []
     }
   }
 
   async componentDidMount(){
     this._polling = setInterval(async () => {
-      const users = await getUsers();
       const connectedProfile = await getConnectedProfile();
       const conversations = await getConversations(connectedProfile);
-      this.setState({ ...this.state, users: users, conversations: conversations });
+      this.setState({ ...this.state, conversations: conversations });
     }, 5000);
   }
 
@@ -77,9 +73,9 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
       <div>
         <div className={contentClasses}>
           <AppMenu unseenMessages={this.state.conversations.reduce((acc, conv) => acc + conv.unseenMessages, 0)} />
-          <AppContent updateConversations={this.updateConversations} users={this.state.users} />
+          <AppContent updateConversations={this.updateConversations} />
         </div>
-        <AppDrawer conversations={this.state.conversations} users={this.state.users}/>
+        <AppDrawer conversations={this.state.conversations} />
       </div>
     );
   }

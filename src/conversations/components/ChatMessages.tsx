@@ -2,14 +2,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import React, { Fragment, RefObject } from 'react';
 import { IConversationMessage } from '../types';
-import { ChatMessage } from './ChatMessage';
-import { IUserInfo } from '../../users/types';
+import ChatMessage from './ChatMessage';
 import { conversationSeen } from '../../api/methods';
 
 export interface IChatMessagesProps {
   conversationId?: string;
   messages: IConversationMessage[];
-  users: IUserInfo[];
 }
 
 class ChatMessages extends React.Component<IChatMessagesProps>{
@@ -36,7 +34,7 @@ class ChatMessages extends React.Component<IChatMessagesProps>{
         <List>
           {this.props.messages.map((message) => (
             <ListItem key={message._id}>
-              <ChatMessage message={message} emitter={this.props.users.find( user => user._id === message.emitter)}/>
+              <ChatMessage message={message}/>
             </ListItem>
           ))}
         </List>
