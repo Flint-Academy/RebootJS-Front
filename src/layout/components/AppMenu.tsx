@@ -9,11 +9,7 @@ import MyConversationsButton from '../../conversations/components/MyConversation
 import { ProfileButton } from './ProfileButton';
 import NavBarName from '../../identity/components/NavBarName';
 
-interface IAppMenuProps {
-  unseenMessages: number;
-}
-
-export function AppMenu({ unseenMessages } : IAppMenuProps){
+export function AppMenu(){
   return (
     <Fragment>
       <AppBar position="static" style={{ height: '10vh' }}>
@@ -31,7 +27,7 @@ export function AppMenu({ unseenMessages } : IAppMenuProps){
           </Grid>
           <Grid item>
             <Toolbar>
-              <MyConversationsButton unseenMessages={unseenMessages}/>
+              <MyConversationsButton />
               <ContactListButton />
               <ProfileButton />
             </Toolbar>

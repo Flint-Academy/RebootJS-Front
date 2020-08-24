@@ -72,10 +72,10 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
     const contentClasses = [classes.content, showDrawer && classes.contentShift].filter(Boolean).join(' ');    return (
       <div>
         <div className={contentClasses}>
-          <AppMenu unseenMessages={this.state.conversations.reduce((acc, conv) => acc + conv.unseenMessages, 0)} />
+          <AppMenu />
           <AppContent updateConversations={this.updateConversations} />
         </div>
-        <AppDrawer conversations={this.state.conversations} />
+        <AppDrawer />
       </div>
     );
   }

@@ -8,6 +8,8 @@ import { IConversation, IConversationsStatus } from '../types';
 import ConversationListItem from './ConversationListItem';
 import { Loading } from '../../layout/utils/Loading';
 import { Link, withRouter } from 'react-router-dom';
+import { IAppState } from '../../appReducer';
+import { connect } from 'react-redux';
 
 export interface IConversationListProps {
   status: IConversationsStatus;
@@ -58,4 +60,7 @@ class ConversationList extends React.Component<IConversationListProps> {
   }
 }
 
-export default withRouter(withStyles(styles)(ConversationList));
+const mapStateToProps = ({ conversations }: IAppState) => ({
+  conversations: conversations.conversations
+})
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(ConversationList)));

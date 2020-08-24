@@ -16,3 +16,16 @@ export interface IConversation {
 }
 
 export type IConversationsStatus = 'unavailable' | 'ready' | 'sending' | 'error';
+
+export interface IConversationsState {
+  conversations: IConversation[];
+  unseenMessages: number;
+}
+
+export const UPDATE_CONVERSATIONS = 'UPDATE_CONVERSATIONS';
+export interface IUpdateConversationsAction {
+  type: typeof UPDATE_CONVERSATIONS;
+  conversations: IConversation[];
+}
+
+export type IConversationsAction = IUpdateConversationsAction;

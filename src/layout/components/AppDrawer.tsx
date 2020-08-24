@@ -8,7 +8,6 @@ import { Dispatch, Action } from 'redux';
 import { IDrawerContent } from '../types';
 import ContactList from '../../users/components/MyContacts';
 import ConversationList from '../../conversations/components/MyConversations';
-import { IConversation } from '../../conversations/types';
 import { IAppState } from '../../appReducer';
 import { connect } from 'react-redux';
 import { hideDrawer } from '../actions/hideDrawer';
@@ -16,7 +15,6 @@ import { hideDrawer } from '../actions/hideDrawer';
 export interface IDrawerDisplayProps {
   show: boolean;
   content?: IDrawerContent;
-  conversations: IConversation[];
   hideDrawer: () => void;
 }
 
@@ -42,13 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export function AppDrawerComponent({ show, content, conversations, hideDrawer }: IDrawerDisplayProps) {
+export function AppDrawerComponent({ show, content, hideDrawer }: IDrawerDisplayProps) {
   const { drawerHeader, paper, drawerContent } = useStyles();
   const contentDisplay =
     content === 'contacts' ? (
       <ContactList />
     ) : content === 'conversations' ? (
-      <ConversationList conversations={conversations} status="ready" />
+      <ConversationList status="ready" />
     ) : content === 'call' ? (
       <h1>Here will appear our call in progress</h1>
     ) : null;

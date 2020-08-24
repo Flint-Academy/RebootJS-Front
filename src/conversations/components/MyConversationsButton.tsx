@@ -4,6 +4,7 @@ import React from 'react';
 import { Badge } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { makeShowConversationList } from '../actions/makeShowConversationList';
+import { IAppState } from '../../appReducer';
 
 interface IShowConversationsButtonProps {
   unseenMessages: number;
@@ -20,7 +21,10 @@ export function MyConversationsButton({ unseenMessages, showConversationList }: 
   );
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({ conversations }: IAppState) => ({
+  unseenMessages: conversations.unseenMessages
+})
+
 const mapDispatchToProps = (dispatch: any) => ({
   showConversationList: () => dispatch(makeShowConversationList()),
 })
