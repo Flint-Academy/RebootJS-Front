@@ -1,26 +1,21 @@
 import React from 'react';
 import { IUserInfo } from '../types';
-import { getConnectedProfile } from '../../api/methods';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import { ContactListItem } from './ContactListItem';
-import { IProfile } from '../../identity/types';
-import history from '../../history';
 import { IAppState } from '../../appReducer';
 import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action } from 'redux';
+import { makeCreateConversation } from '../../conversations/actions/makeCreateConversation';
 
 export interface IContactListProps{
   list: IUserInfo[];
+  createConversation: (targetId: string) => void;
 }
 
 class ContactList extends React.Component<IContactListProps> {
-  createConversation = async (target: string) =>  {
-    const connectedUser = await getConnectedProfile();
-    const conversationId = forgeNewConversationId(connectedUser._id, target);
-    return history.push(`/conversation/${conversationId}?target=${target}`);
-  }
-
   render() {
-    const { list } = this.props
+    const { list, createConversation } = this.props
     return (
         <List>
           { list.length ? null : (
@@ -29,7 +24,7 @@ class ContactList extends React.Component<IContactListProps> {
             </ListItem>
           )}
           {list.map((user) => (
-            <ListItem button onClick={() => this.createConversation(user._id)} key={user._id}>
+            <ListItem button onClick={() => createConversation(user._id)} key={user._id}>
               <ContactListItem info={user} />
             </ListItem>
           ))}
@@ -38,12 +33,12 @@ class ContactList extends React.Component<IContactListProps> {
   }
 }
 
-function forgeNewConversationId(user: IProfile, target: string){
-  return Buffer.from([user._id, target, new Date().toISOString()].join('_')).toString('base64');
-}
-
 const mapStateToProps = ({users}: IAppState) => ({
   list: users.list
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<IAppState, void, Action>) => ({
+  createConversation: (targetId: string) => dispatch(makeCreateConversation(targetId))
 })
 
-export default connect(mapStateToProps)(ContactList);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

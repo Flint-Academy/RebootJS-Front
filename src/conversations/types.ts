@@ -23,9 +23,18 @@ export interface IConversationsState {
 }
 
 export const UPDATE_CONVERSATIONS = 'UPDATE_CONVERSATIONS';
+export const CREATE_CONVERSATION = 'CREATE_CONVERSATION';
+
 export interface IUpdateConversationsAction {
   type: typeof UPDATE_CONVERSATIONS;
   conversations: IConversation[];
 }
 
-export type IConversationsAction = IUpdateConversationsAction;
+export interface ICreateConversationAction {
+  type: typeof CREATE_CONVERSATION;
+  conversationId: string;
+  targets: string[];
+}
+
+export type IConversationsAction = IUpdateConversationsAction
+  | ICreateConversationAction;
