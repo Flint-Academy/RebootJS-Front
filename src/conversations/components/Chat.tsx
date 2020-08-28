@@ -6,49 +6,27 @@ import ChatInput from './ChatInput';
 import { IConversation, IConversationsStatus } from '../types';
 import { Alert } from '../../layout/components/Alert';
 import AttendeeList from './AttendeeList';
-import { getConversation, getConnectedProfile } from '../../api/methods';
 import { Loading } from '../../layout/utils/Loading';
+import { IAppState } from '../../appReducer';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action } from 'redux';
+import { makeConversationSeen } from '../actions/makeConversationSeen';
 
 export interface IChatProps {
   status: IConversationsStatus;
   match: Match<{ conversationId: string }>;
   location: any;
   history: any;
-  updateConversations: () => void;
-}
-
-export interface IChatState {
   conversation?: IConversation;
+  conversationSeen: (id: string) => void;
 }
 
-class Chat extends React.Component<IChatProps, IChatState>{
+class Chat extends React.Component<IChatProps>{
   _isMounted: boolean = false;
-
-  constructor(props: IChatProps) {
-    super(props);
-
-    this.state = {};
-  }
-
-  fetchConversation = async () => {
-    if (this.props.match?.params.conversationId) {
-      const connectedUser = await getConnectedProfile();
-      const conversation = await getConversation(connectedUser, this.props.match?.params.conversationId)
-      if (conversation.targets.length === 0) {
-        const target = new URLSearchParams(this.props.location.search).get('target');
-        conversation.targets = target ? [target] : [];
-      }
-      if (this._isMounted) this.setState({ ...this.state, conversation: conversation })
-      this.props.updateConversations();
-    }
-  }
 
   componentDidMount() {
     this._isMounted = true;
-  }
-
-  componentWillReceiveProps() {
-    this.fetchConversation();
   }
 
   componentWillUnmount() {
@@ -56,12 +34,11 @@ class Chat extends React.Component<IChatProps, IChatState>{
   }
 
   render() {
-    const { conversation } = this.state
+    const { status, conversation, conversationSeen } = this.props;
     const conversationId = conversation ? conversation._id : this.props.match?.params.conversationId;
     if (!conversation) return <Loading />
     if (!conversationId) return <Redirect to="/profile" />;
 
-    const { status } = this.props;
     const progress = status === 'sending' ? <LinearProgress /> : null;
     return (
       <div
@@ -92,10 +69,11 @@ class Chat extends React.Component<IChatProps, IChatState>{
             <ChatMessages
               conversationId={conversationId}
               messages={conversation.messages}
+              conversationSeen={conversationSeen}
             />
           </div>
           <div style={{ flexGrow: 0, height: '60px' }}>
-            <ChatInput conversationId={conversationId} targets={conversation.targets} updateMessages={this.props.updateConversations} />
+            <ChatInput conversationId={conversationId} targets={conversation.targets}/>
           </div>
         </div>
         <div style={{ height: '100%', flexGrow: 0, width: '15%' }}>
@@ -106,4 +84,14 @@ class Chat extends React.Component<IChatProps, IChatState>{
   }
 }
 
-export default withRouter(Chat);
+const mapStateToProps = ({conversations}: IAppState, {match}: IChatProps) => ({
+  conversation: conversations.conversations.find(({ _id }) => {
+    return _id === match.params?.conversationId;
+  }),
+})
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<IAppState, void, Action>) => ({
+  conversationSeen: (id: string) => void dispatch(makeConversationSeen(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Chat));

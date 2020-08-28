@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IUserInfo } from '../users/types';
 import { IProfile } from '../identity/types';
 import { IConversation, IConversationMessage } from '../conversations/types';
+import { countUnseenMessages } from '../conversations/utils/countUnseenMessages';
 
 export async function getUsers(): Promise<IUserInfo[]> {
   const resp = await axios.get(`${process.env.REACT_APP_BACKEND}/users`, { withCredentials: true })
@@ -128,18 +129,20 @@ export async function getConversations(connectedUser: IProfile): Promise<IConver
       targets: targets,
       messages: messages,
       updatedAt: getLastMessageDate(messages),
-      unseenMessages: countUnseenMessages(connectedUser._id, lastSeen, messages),
+      unseenMessages: countUnseenMessages(lastSeen, messages),
     })
   }
   return conversations;
 }
 
-export async function conversationSeen(conversationId: string) : Promise<IProfile> {
+export async function conversationSeen(conversationId: string, seenDate?: string) : Promise<IProfile> {
+  const date = seenDate || new Date().toISOString();
+
   const userProfile = await axios.patch(
     `${process.env.REACT_APP_BACKEND}/users/conversations-seen`,
     {
       conversationId: conversationId,
-      seenDate: new Date().toISOString(),
+      seenDate: date,
     },
     { withCredentials: true }
   ).then(res => res.data)
@@ -148,9 +151,4 @@ export async function conversationSeen(conversationId: string) : Promise<IProfil
 
 function getLastMessageDate(messages: IConversationMessage[]) {
   return messages[messages.length - 1].createdAt;
-}
-
-function countUnseenMessages(connectedUserId: string, lastSeen: string | undefined, messages: IConversationMessage[]) : number{
-  if (!lastSeen) return messages.length;
-  return messages.filter(({ createdAt, emitter }) => emitter !== connectedUserId && createdAt > lastSeen).length;
 }

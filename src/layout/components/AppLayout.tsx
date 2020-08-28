@@ -61,19 +61,13 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
     if(this._polling) clearTimeout(this._polling);
   }
 
-  updateConversations = async () => {
-    const connectedProfile = await getConnectedProfile();
-    const conversations = await getConversations(connectedProfile);
-    this.setState({ ...this.state, conversations: conversations });
-  }
-
   render() {
     const { classes, showDrawer } = this.props;
     const contentClasses = [classes.content, showDrawer && classes.contentShift].filter(Boolean).join(' ');    return (
       <div>
         <div className={contentClasses}>
           <AppMenu />
-          <AppContent updateConversations={this.updateConversations} />
+          <AppContent />
         </div>
         <AppDrawer />
       </div>

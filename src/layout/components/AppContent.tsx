@@ -6,18 +6,14 @@ import ContactList from '../../users/components/MyContacts';
 import MyProfile from '../../profileForm/components/MyProfile';
 import Chat from '../../conversations/components/Chat';
 
-export interface IAppContentProps {
-  updateConversations: () => void;
-}
-
-export function AppContent({ updateConversations }: IAppContentProps) {
+export function AppContent() {
   return (
     <Box style={{ height: '90vh' }}>
       <Switch>
         <Route path="/login" component={LoginScreen}/>
         <Route path="/contacts" component={ContactList} />
         <Route path="/profile" component={MyProfile} />
-        <Route path="/conversation/:conversationId"><Chat updateConversations={updateConversations} status="ready" /></Route>
+        <Route path="/conversation/:conversationId" component={Chat} />
         <Route path="/" component={LoginScreen} />
       </Switch>
     </Box>

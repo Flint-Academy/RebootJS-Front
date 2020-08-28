@@ -24,10 +24,12 @@ export interface IConversationsState {
 
 export const UPDATE_CONVERSATIONS = 'UPDATE_CONVERSATIONS';
 export const CREATE_CONVERSATION = 'CREATE_CONVERSATION';
+export const CONVERSATION_SEEN = 'CONVERSATION_SEEN';
 
 export interface IUpdateConversationsAction {
   type: typeof UPDATE_CONVERSATIONS;
   conversations: IConversation[];
+  conversationsSeen?: { [conversationId: string]: string };
 }
 
 export interface ICreateConversationAction {
@@ -36,5 +38,12 @@ export interface ICreateConversationAction {
   targets: string[];
 }
 
+export interface IConversationSeenAction {
+  type: typeof CONVERSATION_SEEN;
+  id: string;
+  seenDate: string;
+}
+
 export type IConversationsAction = IUpdateConversationsAction
-  | ICreateConversationAction;
+  | ICreateConversationAction
+  | IConversationSeenAction;

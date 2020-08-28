@@ -3,27 +3,23 @@ import ListItem from '@material-ui/core/ListItem';
 import React, { Fragment, RefObject } from 'react';
 import { IConversationMessage } from '../types';
 import ChatMessage from './ChatMessage';
-import { conversationSeen } from '../../api/methods';
 
 export interface IChatMessagesProps {
   conversationId?: string;
   messages: IConversationMessage[];
+  conversationSeen: (id: string) => void;
 }
 
 class ChatMessages extends React.Component<IChatMessagesProps>{
   ref: RefObject<HTMLElement> = {current: null}
 
-  conversationSeen = (id: string) => {
-    conversationSeen(id);
-  }
-
   componentDidMount(){
-    if (this.props.conversationId) this.conversationSeen(this.props.conversationId);
+    if (this.props.conversationId) this.props.conversationSeen(this.props.conversationId);
     this.ref.current?.scrollIntoView(false);
   }
 
   componentDidUpdate(){
-    if (this.props.conversationId) this.conversationSeen(this.props.conversationId);
+    if (this.props.conversationId) this.props.conversationSeen(this.props.conversationId);
     this.ref.current?.scrollIntoView(false);
   }
 
