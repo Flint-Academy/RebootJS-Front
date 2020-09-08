@@ -11,7 +11,7 @@ export const makeDeleteProfile = () => {
       await deleteConnectedProfile();
       history.push('/');
     } catch (error) {
-      console.log('There has been an error');
+      console.error('There has been an error');
     }
   };
 };

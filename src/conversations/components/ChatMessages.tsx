@@ -18,9 +18,13 @@ class ChatMessages extends React.Component<IChatMessagesProps>{
     this.ref.current?.scrollIntoView(false);
   }
 
-  componentDidUpdate(){
-    if (this.props.conversationId) this.props.conversationSeen(this.props.conversationId);
-    this.ref.current?.scrollIntoView(false);
+  componentDidUpdate(prevProps: IChatMessagesProps){
+    const { conversationId, messages, conversationSeen } = this.props;
+    const { conversationId: prevConversationId, messages: prevMessages, conversationSeen: prevConversationSeen }= prevProps
+    if(conversationId !== prevConversationId || messages !== prevMessages || conversationSeen !== prevConversationSeen ) {
+      if (this.props.conversationId) this.props.conversationSeen(this.props.conversationId);
+      this.ref.current?.scrollIntoView(false);
+    }
   }
 
   render() {

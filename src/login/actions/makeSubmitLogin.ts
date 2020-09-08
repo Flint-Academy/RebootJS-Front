@@ -17,7 +17,7 @@ export const makeSubmitLogin = () => {
       dispatch(makeInitApp(profile));
       history.push(`/profile`);
     } catch {
-      console.log("For now let's just print that there has been an error");
+      console.error("For now let's just print that there has been an error");
     }
   }
 }

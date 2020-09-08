@@ -70,7 +70,6 @@ export async function patchProfile(data: { firstname: string, lastname: string, 
 }
 
 export async function sendMessage(conversationId: string, targets: string[], message: string): Promise<IConversationMessage> {
-  console.log(`Message ${message} sent to ${targets.join(", ")}`);
   const resp = await axios.post(
     `${process.env.REACT_APP_BACKEND}/messages`,
     {

@@ -10,7 +10,7 @@ export const makeFetchConversations = () => {
       const connectedProfile = getState().identity.info;
       if(!connectedProfile) throw Error("Cannot fetch conversation while not connected");
       const conversations = await getConversations(connectedProfile);
-      dispatch(updateConversations(conversations));
+      dispatch(updateConversations(conversations, connectedProfile.conversationsSeen));
     } catch (error) {
       console.error("There has been an error", error);
     }

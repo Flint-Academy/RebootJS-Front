@@ -11,7 +11,7 @@ export const makeLogout = () => {
       await logout()
       dispatch(makeExitApp());
     } catch (error) {
-      console.log('There has been an error');
+      console.error('There has been an error');
     }
   };
 };
