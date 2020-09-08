@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
 import history from '../../history';
-import { deleteConnectedProfile } from '../../api/methods';
+import { deleteConnectedProfile } from '../../api/api_methods';
 
 
 export const makeDeleteProfile = () => {

@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
-import { getConnectedProfile } from '../../api/methods';
+import { getConnectedProfile } from '../../api/api_methods';
 import { makeInitApp } from '../../layout/actions/makeInitApp';
 import { makeExitApp } from '../../layout/actions/makeExitApp';
 

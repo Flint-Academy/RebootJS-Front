@@ -1,11 +1,10 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
-import { sendMessage } from '../../api/methods';
+import { sendMessage } from '../../api/api_methods';
 import { updateConversations } from './updateConversations';
 import { messageComparator } from '../utils/messageComparator';
 import { lastMessageDate } from '../utils/lastMessageDate';
-import { cpuUsage } from 'process';
 
 export const makeSendMessage = (conversationId: string, message: string) => {
   return async (dispatch: ThunkDispatch<IAppState, void, Action>, getState: () => IAppState) => {

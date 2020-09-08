@@ -4,7 +4,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
 import { updateIdentity } from '../../identity/actions/updateIdentity';
 import { conversationSeen } from './conversationSeen';
-import { conversationSeen as apiConversationSeen } from '../../api/methods';
+import { conversationSeen as apiConversationSeen } from '../../api/api_methods';
 
 export const makeConversationSeen = (id: string) => {
   return async (dispatch: ThunkDispatch<IAppState, void, Action>) => {

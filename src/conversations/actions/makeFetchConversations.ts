@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
 import { updateConversations } from './updateConversations';
-import { getConversations } from '../../api/methods';
+import { getConversations } from '../../api/api_methods';
 
 export const makeFetchConversations = () => {
   return async (dispatch: ThunkDispatch<IAppState, void, Action>, getState: () => IAppState) => {

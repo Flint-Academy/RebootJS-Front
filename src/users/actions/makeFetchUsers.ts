@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
-import { getUsers } from '../../api/methods';
+import { getUsers } from '../../api/api_methods';
 import { updateUsersList } from './updateUsersList';
 
 export const makeFetchUsers = () => {

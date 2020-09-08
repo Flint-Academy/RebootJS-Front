@@ -1,5 +1,5 @@
 import { IProfileFormFields } from "../types";
-import { createProfile, deleteConnectedProfile } from "../../api/methods";
+import { createProfile, deleteConnectedProfile } from "../../api/api_methods";
 import { IProfile } from "../../identity/types";
 
 export function createNewProfile(fields: IProfileFormFields): Promise<IProfile>{

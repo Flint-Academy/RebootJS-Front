@@ -1,4 +1,4 @@
-import { loginUser } from '../../api/methods';
+import { loginUser } from '../../api/api_methods';
 import history from '../../history';
 import { IAppState } from '../../appReducer';
 import { makeInitApp } from '../../layout/actions/makeInitApp';

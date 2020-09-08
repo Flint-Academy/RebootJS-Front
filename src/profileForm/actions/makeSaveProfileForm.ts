@@ -1,7 +1,7 @@
 import { IAppState } from "../../appReducer"
 import { ThunkDispatch } from "redux-thunk"
 import { Action } from "redux"
-import { patchProfile } from "../../api/methods"
+import { patchProfile } from "../../api/api_methods"
 import { updateIdentity } from "../../identity/actions/updateIdentity"
 
 export const makeSaveProfileForm = () => {

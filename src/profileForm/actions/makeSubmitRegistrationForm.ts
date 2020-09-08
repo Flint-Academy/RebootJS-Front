@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { IAppState } from '../../appReducer';
 import history from '../../history';
-import { createProfile } from '../../api/methods';
+import { createProfile } from '../../api/api_methods';
 import { makeExitApp } from '../../layout/actions/makeExitApp';
 import { makeInitApp } from '../../layout/actions/makeInitApp';
 

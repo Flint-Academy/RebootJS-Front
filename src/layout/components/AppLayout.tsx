@@ -3,7 +3,7 @@ import React from 'react';
 import { AppMenu } from './AppMenu';
 import { AppContent } from './AppContent';
 import { AppDrawer, drawerWidth } from './AppDrawer';
-import { getConnectedProfile, getConversations } from '../../api/methods';
+import { getConnectedProfile, getConversations } from '../../api/api_methods';
 import { IConversation } from '../../conversations/types';
 import { IAppState } from '../../appReducer';
 import { connect } from 'react-redux';
