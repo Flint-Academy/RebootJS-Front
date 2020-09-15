@@ -17,7 +17,7 @@ export const makeConversationSeen = (id: string) => {
         dispatch(conversationSeen(id, seenDate));
       });
     } catch (error) {
-      console.error("There has been an error", error)
+      // igore
     }
   };
 };
