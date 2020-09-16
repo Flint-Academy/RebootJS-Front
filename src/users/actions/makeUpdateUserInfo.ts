@@ -10,6 +10,6 @@ export const makeUpdateUserInfo = (infos: IUserInfo[]) => {
     const myId = getState().identity.info?._id;
     const myInfo = infos.find(({ _id }) => _id === myId);
     if (myInfo) dispatch(updateIdentity(myInfo));
-    dispatch(updateUserInfo(infos.filter(({ _id }) => _id !== myId)));
+    dispatch(updateUserInfo(infos));
   };
 };

@@ -109,7 +109,7 @@ export async function getConversations(connectedUser: IProfile): Promise<IConver
   ).then(res => res.data);
   if (messages.length === 0) return []
 
-  const batches = messages.reduce<{ [converstionId: string]: IConversationMessage[] }>(
+  const batches = messages.reduce<{ [conversationId: string]: IConversationMessage[] }>(
     (res, message) => ({
       ...res,
       [message.conversationId]: [...(res[message.conversationId] || []), message],

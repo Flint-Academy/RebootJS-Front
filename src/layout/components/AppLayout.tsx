@@ -3,7 +3,6 @@ import React from 'react';
 import { AppMenu } from './AppMenu';
 import { AppContent } from './AppContent';
 import { AppDrawer, drawerWidth } from './AppDrawer';
-import { getConnectedProfile, getConversations } from '../../api/api_methods';
 import { IConversation } from '../../conversations/types';
 import { IAppState } from '../../appReducer';
 import { connect } from 'react-redux';
@@ -40,25 +39,11 @@ interface AppLayoutState {
 }
 
 class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
-  _polling?: NodeJS.Timeout;
-
   constructor(props: AppLayoutProps){
     super(props);
     this.state = {
       conversations: [],
     }
-  }
-
-  async componentDidMount(){
-    this._polling = setInterval(async () => {
-      const connectedProfile = await getConnectedProfile();
-      const conversations = await getConversations(connectedProfile);
-      this.setState({ ...this.state, conversations: conversations });
-    }, 5000);
-  }
-
-  componentWillUnmount(){
-    if(this._polling) clearTimeout(this._polling);
   }
 
   render() {

@@ -25,6 +25,7 @@ export interface IConversationsState {
 export const UPDATE_CONVERSATIONS = 'UPDATE_CONVERSATIONS';
 export const CREATE_CONVERSATION = 'CREATE_CONVERSATION';
 export const CONVERSATION_SEEN = 'CONVERSATION_SEEN';
+export const ENSURE_CONVERSATION = 'ENSURE_CONVERSATION';
 
 export interface IUpdateConversationsAction {
   type: typeof UPDATE_CONVERSATIONS;
@@ -44,6 +45,15 @@ export interface IConversationSeenAction {
   seenDate: string;
 }
 
+export interface IEnsureConversationAction {
+  type: typeof ENSURE_CONVERSATION;
+  conversationId: string;
+  targets: string[];
+  createdAt: string;
+  messages?: IConversationMessage[];
+}
+
 export type IConversationsAction = IUpdateConversationsAction
   | ICreateConversationAction
-  | IConversationSeenAction;
+  | IConversationSeenAction
+  | IEnsureConversationAction;
