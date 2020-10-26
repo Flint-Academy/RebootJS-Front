@@ -8,6 +8,7 @@ import { makeUpdateUserInfo } from '../../users/actions/makeUpdateUserInfo';
 import { IConversationMessage } from '../../conversations/types';
 import { makeUpdateConversationMessage } from '../../conversations/actions/makeUpdateConversationMessages';
 import { makeIncomingCall } from '../../call/actions/makeIncomingCall';
+import { makeCallPeeringCreateOffer } from '../../call/actions/makeCallPeeringCreateOffer';
 
 export const makeStartSocket = () => {
   return async (dispatch: ThunkDispatch<IAppState, void, Action>, getState: () => IAppState) => {
@@ -37,6 +38,11 @@ export const makeStartSocket = () => {
         console.log(`receiving [call-peering-request] <-------`);
         dispatch(makeIncomingCall(data.conversationId, data.emitter));
       });
+
+      socket.on('call-peering-accepted', (data: any) => {
+        console.log(`receiving [call-peering-accept] <-------`);
+        dispatch(makeCallPeeringCreateOffer(data.conversationId, data.emitter));
+      })
     } catch (error) {
       console.error('There has been an error', error);
     }
