@@ -6,6 +6,8 @@ import { layout } from './layout/reducer';
 import { profileForm } from './profileForm/reducer';
 import { users } from './users/reducer';
 import { conversations } from './conversations/reducer';
+import { socket } from './socket/reducer';
+import { call } from './call/reducer';
 
 export const appReducer = combineReducers({
   login,
@@ -13,7 +15,9 @@ export const appReducer = combineReducers({
   profileForm,
   conversations,
   identity,
-  users
+  users,
+  socket,
+  call
 })
 
 export type IAppState = ReturnType<typeof appReducer>;
