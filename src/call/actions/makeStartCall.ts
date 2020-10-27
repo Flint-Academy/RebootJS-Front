@@ -1,6 +1,7 @@
 import { IAppState } from "../../appReducer";
 import { makeEmit } from "../../socket/actions/makeEmit";
 import { getLocalInputs } from "../utils/getLocalInputs";
+import { makeCallModeEnter } from "./makeCallModeEnter";
 import { makeCallPeeringInitiate } from "./makeCallPeeringInitiate";
 import { updateCallLocalInputs } from "./updateCallLocalInputs";
 
@@ -12,6 +13,9 @@ export function makeStartCall(conversationId: string){
     const connectedUser = getState().identity.info
     if(!connectedUser) { return }
     const toBeCalled = conversation.targets.filter(target => target !== connectedUser._id)
+
+    // Start call mode
+    dispatch(makeCallModeEnter(conversationId, conversation.targets));
 
     // Create local media inputs
     const localInputs = await getLocalInputs();

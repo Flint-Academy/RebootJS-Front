@@ -6,6 +6,7 @@ import { AppDrawer, drawerWidth } from './AppDrawer';
 import { IConversation } from '../../conversations/types';
 import { IAppState } from '../../appReducer';
 import { connect } from 'react-redux';
+import { IncomingCallNotification } from '../../call/components/IncomingCallNotification';
 
 const styles = (theme: Theme) =>
 createStyles({
@@ -55,6 +56,7 @@ class AppLayout extends React.Component<AppLayoutProps, AppLayoutState>{
           <AppContent />
         </div>
         <AppDrawer />
+        <IncomingCallNotification />
       </div>
     );
   }

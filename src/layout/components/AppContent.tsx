@@ -5,6 +5,7 @@ import LoginScreen from '../../login/components/LoginScreen';
 import ContactList from '../../users/components/MyContacts';
 import MyProfile from '../../profileForm/components/MyProfile';
 import Chat from '../../conversations/components/Chat';
+import { Call } from '../../call/components/Call';
 
 export function AppContent() {
   return (
@@ -14,6 +15,7 @@ export function AppContent() {
         <Route path="/contacts" component={ContactList} />
         <Route path="/profile" component={MyProfile} />
         <Route path="/conversation/:conversationId" component={Chat} />
+        <Route path="/call" component={Call} />
         <Route path="/" component={LoginScreen} />
       </Switch>
     </Box>

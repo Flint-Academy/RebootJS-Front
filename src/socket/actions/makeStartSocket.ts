@@ -60,7 +60,9 @@ export const makeStartSocket = () => {
 
       socket.on('call-peering-ice-candidate', (data: any) => {
         console.log(`receiving [call-peering-ice-candidate] <-------`);
-        dispatch(makeCallPeeringAddIceCandidate(data.conversationId, data.emitter, data.candidate));
+        console.log('data', data);
+        console.log('candidate from data', new RTCIceCandidate(data.candidate));
+        dispatch(makeCallPeeringAddIceCandidate(data.emitter, data.candidate));
       });
 
       socket.on('call-left', (data: any) => {

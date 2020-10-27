@@ -5,7 +5,7 @@ import { addIceCandidateToPeerConnexion } from '../utils/addIceCandidateToPeerCo
 import { assertExistingPeerConnexion } from '../utils/assertExistingPeerConnexion';
 
 export const makeCallPeeringAddIceCandidate =
-  (conversationId: string, target: string, candidate: RTCIceCandidateInit) => {
+  (target: string, candidate: RTCIceCandidateInit) => {
     return async (_: ThunkDispatch<IAppState, void, Action>, getState: () => IAppState) => {
       const peerConnection = assertExistingPeerConnexion(getState(), target);
 
