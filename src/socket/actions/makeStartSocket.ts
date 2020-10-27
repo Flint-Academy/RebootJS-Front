@@ -11,6 +11,8 @@ import { makeIncomingCall } from '../../call/actions/makeIncomingCall';
 import { makeCallPeeringCreateOffer } from '../../call/actions/makeCallPeeringCreateOffer';
 import { makeCallPeeringAnswerToOffer } from '../../call/actions/makeCallPeeringAnswerToOffer';
 import { makeCallPeeringFinalized } from '../../call/actions/makeCallPeeringFinalized';
+import { makeCallPeeringAddIceCandidate } from '../../call/actions/makeCallPeeringAddIceCandidate';
+import { makeCallPeeringClosed } from '../../call/actions/makeCallPeeringClosed';
 
 export const makeStartSocket = () => {
   return async (dispatch: ThunkDispatch<IAppState, void, Action>, getState: () => IAppState) => {
@@ -54,7 +56,17 @@ export const makeStartSocket = () => {
       socket.on('call-peering-answer', (data: any) => {
         console.log(`receiving [call-peering-answer] <-------`);
         dispatch(makeCallPeeringFinalized(data.conversationId, data.emitter, data.answer));
-      })
+      });
+
+      socket.on('call-peering-ice-candidate', (data: any) => {
+        console.log(`receiving [call-peering-ice-candidate] <-------`);
+        dispatch(makeCallPeeringAddIceCandidate(data.conversationId, data.emitter, data.candidate));
+      });
+
+      socket.on('call-left', (data: any) => {
+        console.log(`receiving [call-left] <-------`);
+        dispatch(makeCallPeeringClosed(data.conversationId, data.emitter));
+      });
     } catch (error) {
       console.error('There has been an error', error);
     }
