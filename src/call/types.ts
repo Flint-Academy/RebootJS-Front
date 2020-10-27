@@ -32,6 +32,8 @@ export const SET_CALL_CONVERSATION_ID = 'SET_CALL_CONVERSATION_ID';
 export const SET_INCOMING_CALL = 'SET_INCOMING_CALL';
 export const UPDATE_CALL_REMOTE = 'UPDATE_CALL_REMOTE';
 export const UPDATE_CALL_REMOTE_STREAM = 'UPDATE_CALL_REMOTE_STREAM';
+export const TOGGLE_CALL_VIDEO_INPUT = 'TOGGLE_CALL_VIDEO_INPUT';
+export const TOGGLE_CALL_AUDIO_INPUT = 'TOGGLE_CALL_AUDIO_INPUT';
 
 export interface ICallResetAction {
   type: typeof CALL_RESET;
@@ -63,6 +65,14 @@ export interface IUpdateCallRemoteStreamAction {
   stream?: MediaStream;
 }
 
+export interface IToggleCallAudioInputAction {
+  type: typeof TOGGLE_CALL_AUDIO_INPUT;
+}
+
+export interface IToggleCallVideoInputAction {
+  type: typeof TOGGLE_CALL_VIDEO_INPUT;
+}
+
 export interface ICallState {
   conversationId?: string;
   inputs?: ILocalInputs;
@@ -76,3 +86,5 @@ export type ICallAction = ICallResetAction
   | ISetIncomingCallAction
   | IUpdateCallRemoteAction
   | IUpdateCallRemoteStreamAction
+  | IToggleCallAudioInputAction
+  | IToggleCallVideoInputAction

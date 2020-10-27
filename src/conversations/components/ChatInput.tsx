@@ -7,6 +7,7 @@ import { IAppState } from '../../appReducer';
 import { Action } from 'redux';
 import { connect } from 'react-redux';
 import { makeSendMessage } from '../actions/makeSendMessage';
+import { StartCallButton } from '../../call/components/StartCallButton';
 
 interface IChatInputProps {
   conversationId: string;
@@ -66,6 +67,7 @@ class ChatInput extends React.Component<IChatInputProps, IChatInputState>{
             <Fab type="submit" color="primary" aria-label="send">
               <Send fontSize="large" />
             </Fab>
+            <StartCallButton conversationId={this.props.conversationId} />;
           </div>
         </div>
       </form>

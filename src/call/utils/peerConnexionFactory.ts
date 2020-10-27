@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { displayCandidate } from './displayCandidate';
 import { easyId } from './easyId';
-import { config } from '../../config';
 
 export async function peerConnexionFactory(
   onicecandidate: (candidate: RTCIceCandidate) => void,
@@ -31,8 +30,7 @@ export async function peerConnexionFactory(
 
   // twilio STUN / STURN provider
 
-  const { api_backend_url } = config;
-  const response = await axios.get(`${api_backend_url}/webrtc/ice-servers`, { withCredentials: true });
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/webrtc/ice-servers`, { withCredentials: true });
   const iceServersConfig = response.data;
 
   const peerConnection = new RTCPeerConnection(iceServersConfig);

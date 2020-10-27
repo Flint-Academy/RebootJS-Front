@@ -8,6 +8,7 @@ import { makeCallPeeringClosed } from './makeCallPeeringClosed';
 import { bindStreamToPeerConnexion } from '../utils/bindStreamToPeerConnexion';
 import { peerConnexionFactory } from '../utils/peerConnexionFactory';
 import { assertExistingLocalInputs } from '../utils/assertExistingLocalInputs';
+import { remotePeerFactory } from '../utils/remotePeerFactory';
 
 export const makeCallPeeringInitiate =
   (conversationId: string, target: string, fromStartCall?: boolean) => {
